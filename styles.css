@@ -1,0 +1,67 @@
+body{
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  margin-left: 15rm;
+  
+}
+.btn-img {
+  padding: 0;
+  overflow: hidden;
+}
+
+.btn-img img {
+  width: 1.5em;
+  height: 1.5em;
+  object-fit: cover;
+}
+.btn {
+  width:10em;
+}
+
+
+.traffic-light.horizontal {
+  display: flex;
+  flex-direction: row;
+}
+#alert {
+  width: 2.5em;
+  height: 2.5em;
+  border-radius: 25px;
+  margin-right: 1em;
+  margin-top: 1em;
+} 
+
+.light {
+  width: 2.5em;
+  height: 2.25em;
+  border-radius: 25px;
+  margin-right: 0.5em;
+  margin-top: 1em;
+  opacity: 0.3;
+}
+
+.light.on {
+  animation: blink 1s linear infinite;
+  opacity: 1;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.white {
+  background-color: white;
+}
+.red {
+  background-color: #f00;
+}
+
+.yellow {
+  background-color: #ff0;
+}
+
+.green {
+  background-color: #0f0;
+}
