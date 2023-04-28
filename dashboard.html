@@ -8,20 +8,23 @@
   
   <!-- Schriftart -->
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <!-- Material Icons -->
- 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
 
-  <!-- Custom CSS -->
+<!-- Bootstrap5  Framework cdn -> damit werden die verschiedenen Funktionen die Bootstrap zur Verfügung stellt importiert damit man diese verwenden kann. -->
+  
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script> -->
+
+  <!-- Custom CSS: Hier importiere ich die style.css womit die HTMl Elemente verschönert, geformt... werden -->
   <link rel="stylesheet" href="styles.css">
 
 </head>
 
+<!-- Durch background-color:...; im Tag <body> wird die gewünschte Hintergrundfarbe festgelegt -->
 <body style="background-color: #717e87;">
+  <!-- navbar: erstellt den oberen Balken der Webanwendung, durch background-color:....; wird die gewünschte Farbe festgelegt. -->
   <nav class="navbar navbar-expand-lg" style="background-color: #314151;">
     <a style="margin-left: 1em;">Dashboard</a>
     <div class="container-fluid">
@@ -38,6 +41,7 @@
     </main>
   </div>  
 
+  <!-- Erstellung der Ampel-HTML-Elemente -->
       <div class="container-fluid">
         <div class="traffic-light horizontal">
         <div class="light red" id="redlight"></div>
@@ -56,9 +60,11 @@
         </div>
       </div>
       </div>
-      
+
+      <!-- Apexcharts: Werden wir evtl. später zur Visualisierung von Statistiken etc. verwenden -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
 
+<!-- Importierung des verwendeten javascript-codes  -->
   <script src="database.js"></script>
   <script src="index.js"></script>
   <script src="scripts.js"></script>

@@ -1,3 +1,5 @@
+/* Werden wir evtl. später benötigen für die Requests an die Datenbank */
+
 async function requestDatabase(method, path, body = {}) {
   let response;
   if (method === "GET" || method === "HEAD") {
