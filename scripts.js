@@ -1,3 +1,5 @@
+/* HTML Elemente sind mit IDs versehen (id="redlight"...), womit man durch javascript auf diese Elemente zugreifen kann */
+
 const redLight = document.getElementById("redlight");
 const yellowLight = document.getElementById('yellowlight');
 const greenLight = document.getElementById('greenlight');
@@ -5,7 +7,7 @@ const whiteLight = document.getElementById('whitelight');
 let activeLight = redLight;
 
 
-
+/* Ändert die Transparenz der Ampellichter jede Sekunde ein anderes Licht  */
 
  setInterval(() => {
 

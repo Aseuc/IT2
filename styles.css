@@ -1,9 +1,17 @@
+/* Festlegen der Schriftart */
+
 body{
   font-family: 'Roboto', sans-serif;
   color: white;
   margin-left: 15rm;
   
 }
+
+
+/* Warnungsicon */
+
+
+/* legt die Maße des Icons fest */
 .btn-img {
   padding: 0;
   overflow: hidden;
@@ -18,11 +26,6 @@ body{
   width:10em;
 }
 
-
-.traffic-light.horizontal {
-  display: flex;
-  flex-direction: row;
-}
 #alert {
   width: 2.5em;
   height: 2.5em;
@@ -30,6 +33,17 @@ body{
   margin-right: 1em;
   margin-top: 1em;
 } 
+
+/* Ampel */
+
+/* Richtet die Ampel horizontal aus */
+
+.traffic-light.horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+/* Formt die Ampellichter */
 
 .light {
   width: 2.5em;
@@ -40,16 +54,7 @@ body{
   opacity: 0.3;
 }
 
-.light.on {
-  animation: blink 1s linear infinite;
-  opacity: 1;
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0.3;
-  }
-}
+/* Legt die Farben für die Lichter fest */
 
 .white {
   background-color: white;
