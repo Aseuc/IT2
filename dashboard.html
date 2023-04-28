@@ -41,12 +41,14 @@
 
       <div class="container-fluid">
         <div class="traffic-light horizontal">
-        <div class="light red"></div>
-        <div class="light yellow"></div>
-        <div class="light green"></div>
-        <div class="light white"></div> 
+        <div class="light red" id="redlight"></div>
+        <div class="light yellow"id="yellowlight"></div>
+        <div class="light green"id="greenlight"></div>
+        <div class="light white"id="whitelight"></div> 
         <div class="container-fluid text-end">
-        <button type="button"  style="margin-top:1em; pointer-events:none; background-color: #d24525; color: white;" class="btn btn btn-img" id="alert"><img src="/danger.jpg"></button>
+        <button type="button"  style="margin-top:1em; pointer-events:none; 
+        background-color: #d24525; color: white;" class="btn btn btn-img" id="alert"><img src="/danger.jpg" data-bs-toggle="popover" 
+        data-bs-content="Hello"></button>
         <button type="button" style="margin-top:1em; pointer-events:none; background-color: #217446; color: white;" class="btn btn" id="timer-btn">Timer</button>
         <button type="button" style="margin-top:1em; pointer-events:none; background-color: #d24525; color: white;" class="btn btn">Eskalation</button>
         <div class="alert"></div>
@@ -58,6 +60,7 @@
 
   <script src="database.js"></script>
   <script src="index.js"></script>
+  <script src="scripts.js"></script>
 </body>
 
 </html>
