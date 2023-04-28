@@ -31,3 +31,18 @@ let activeLight = redLight;
     }
   
 }, 1000);
+
+/* Für den Timer wird hier die Zeit angezeigt wie lange beispielsweise die Anwendung etc. noch läuft. erstmal nur Beispielcode*/
+function timer(){
+let timeLeft = 60;
+const timerButton = document.querySelector('#timer-btn');
+
+  const timer = setInterval(() => {
+    timeLeft--;
+    timerButton.textContent = timeLeft;
+
+    if (timeLeft === 0) {
+      /* clearInterval(timer); */
+      timeLeft = 10;
+    }
+  }, 1000);}
