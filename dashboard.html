@@ -58,13 +58,17 @@
         </div>
       </div>
       </div>
-
+      
+      <div class="container" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <div id="draggable" draggable="true" ondragstart="drag(event)"></div>
+      </div>
+      <div class="container" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
       <!-- Apexcharts: Werden wir evtl. später zur Visualisierung von Statistiken etc. verwenden -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.3/apexcharts.min.js"></script>
+ 
 
 <!-- Importierung des verwendeten javascript-codes  -->
   <script src="database.js"></script>
-  <script src="index.js"></script>
+  <script src= "draganddrop.js"></script>
   <script src="scripts.js"></script>
 </body>
 
