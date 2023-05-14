@@ -5,8 +5,11 @@ async function handleLoginEvent(event) {
   const user = document.getElementById("username").value;
   const pass = document.getElementById("password").value;
   const registerButton = document.getElementById("loginButton");
-
   let result;
+
+
+
+  
   try {
     result = await login(user, pass);
     if (result.response.status >= 400) {
@@ -16,8 +19,7 @@ async function handleLoginEvent(event) {
         "Error: " + error + " (" + reason + ")";
     } else location.href = "dashboard.html";
   } catch (e) {
-   /*  document.getElementById("status").innerText = "Do you try to hack me? Then write an email to: smartairsolution.nuremberg@gmail.com";
-    document.getElementById("status").setAttribute("style", "color:red"); */
+
     event.preventDefault();
   }
 }

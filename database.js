@@ -1,53 +1,69 @@
-/* Werden wir evtl. später benötigen für die Requests an die Datenbank */
+/* Werden wir evtl. spätbenötigen für die Requests an die Datenbank */
 
-async function requestDatabase(method, path, body = {}) {
-  let response;
-  if (method === "GET" || method === "HEAD") {
-    response = await fetch(databaseURI + path, {
-      method: method,
-      credentials: "include"
-    });
+let data1 = [];
+
+async function getData1() {
+  return fetch('https://it2wi1.if-lab.de/rest/mpr_fall1')
+    .then(response => response.json())
+    .catch(error => console.error(error));
+}
+
+const xhr = new XMLHttpRequest();
+function getData12(){
+xhr.open('GET', 'https://it2wi1.if-lab.de/rest/mpr_fall1');
+xhr.onload = function() {
+  if (xhr.status === 200) {
+    const data = JSON.parse(xhr.responseText);
+    // Use the data here
+   return  data.forEach(element => {
+    data1.push(element.werte)
+   });
+
+
+
   } else {
-    response = await fetch(databaseURI + path, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json"
-      },
-      credentials: "include",
-      body: JSON.stringify(body)
-    });
+    console.error('Request failed. Status code: ' + xhr.status);
   }
-  const message = await response.json();
-  return {
-    response: response,
-    message: message
-  };
-}
+};
+xhr.send();}
 
-async function login(user, pass) {
-  if (!user || !pass || user === "" || pass === "")
-    return new Error("No credentials provided");
-  const credentials = {
-    name: user,
-    password: pass
-  };
-  let result;
+getData12();
+
+
+
+
+
+
+
+async function getData2(){
+
   try {
-    result = await requestDatabase("POST", "_session", credentials);
-  } catch (e) {
-    return new Error(e.message);
+    const response = await fetch('https://it2wi1.if-lab.de/rest/mpr_fall2');
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
   }
-  console.log(result);
-  return result;
 }
 
-async function getUser() {
-  const result = await requestDatabase("GET", "_session");
-  if (!result.message.hasOwnProperty("userCtx")) return null;
-  return result.message.userCtx.name;
+async function getData3(){
+  try {
+    const response = await fetch('https://it2wi1.if-lab.de/rest/mpr_fall3');
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-async function logout() {
-  await requestDatabase("DELETE", "_session");
-  location.href = "../../";
+async function getData4(){
+  try {
+    const response = await fetch('https://it2wi1.if-lab.de/rest/mpr_fall4');
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
 }
+
+

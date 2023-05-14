@@ -71,16 +71,54 @@ body{
   background-color: #0f0;
 }
 
-.container {
+#container1, #container2 {
+  display: grid;
+  grid-template-columns: repeat(2, 2fr);
+
+  grid-gap: 5px;
   width: 200px;
   height: 200px;
-  background-color: lightblue;
-  display: inline-block;
-  margin: 10px;
+  
+ 
+  background-color: black;
+ 
+}
+
+.parent-container {
+  display: flex;
+  
 }
 #draggable {
-  width: 100px;
-  height: 100px;
+  width: calc(100% - 10px);
+  height: 90px;
   background-color: red;
   cursor: move;
+
 }
+#draggable2 {
+  width: calc(100% - 10px);
+  height:90px;
+  background-color: blue;
+  cursor: move;
+}
+
+#draggable3 {
+  width: calc(100% - 10px);
+  height:90px;
+  background-color: green;
+  cursor: move;
+
+}
+
+#draggable4 {
+  width: calc(100% - 10px);
+  height: 90px;
+  background-color: yellow;
+  cursor: move;
+
+}
+
+.apexcharts-menu{
+  background-color: #27293d!important;
+  border: 0px;
+  }
