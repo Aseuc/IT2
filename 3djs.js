@@ -31,14 +31,14 @@ for (let i = 0; i < data4.length; i++) {
 
   let timeArray = Xdata.map((str) => str.replace(/\d{2}\.\d{2}\.\d{4}/, ''));
 
-  timeArray = timeArray.map(function (value) {return value.slice(5);});
+/*   timeArray = timeArray.map(function (value) {return value.slice(5);}); */
   
   
   let timeArray2 = getMinutesEveryFive(timeArray);
 
   Ydata = Ydata.map(function(value){ return value.replace(",",".")})
   const options = {
-    dataLabels: {
+   /*  dataLabels: {
       enabled: true,
       background: {
         enabled: true,
@@ -49,9 +49,8 @@ for (let i = 0; i < data4.length; i++) {
         padding: 4,
         opacity: 0.9
       }
-    },
+    }, */
     toolbar: {
-     borderColor:'black',
      tools: {
       pan: true
     }
@@ -146,7 +145,8 @@ for (let i = 0; i < data4.length; i++) {
         },
       }, 
       xaxis: {
-      
+   
+        
         categories: timeArray2,
         
       }
@@ -196,7 +196,7 @@ for (let i = 0; i < data4.length; i++) {
     Ydata = Ydata.map(function(value){ return value.replace(",",".")})
     
     const options = {
-      dataLabels: {
+    /*   dataLabels: {
         enabled: true,
         background: {
           enabled: true,
@@ -207,7 +207,7 @@ for (let i = 0; i < data4.length; i++) {
           padding: 4,
           opacity: 0.9
         }
-      },
+      }, */
       toolbar: {
         borderColor:'black',
         tools: {
@@ -298,6 +298,9 @@ for (let i = 0; i < data4.length; i++) {
           },
         },
         xaxis: {
+          title:{
+            text:"Zeit in Sekunden"
+          },
           categories: timeArray,
         }
       };
@@ -348,7 +351,7 @@ for (let i = 0; i < data4.length; i++) {
       Ydata = Ydata.map(function(value){ return value.replace(",",".")})
 
       const options = {
-        dataLabels: {
+       /*  dataLabels: {
           enabled: true,
           background: {
             enabled: true,
@@ -359,7 +362,7 @@ for (let i = 0; i < data4.length; i++) {
             padding: 4,
             opacity: 0.9
           }
-        },
+        }, */
         toolbar: {
           tools: {
            pan: true
