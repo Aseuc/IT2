@@ -32,7 +32,7 @@ for (let i = 0; i < data4.length; i++) {
   let timeArray = Xdata.map((str) => str.replace(/\d{2}\.\d{2}\.\d{4}/, ''));
 
 /*   timeArray = timeArray.map(function (value) {return value.slice(5);}); */
-  
+
   
   let timeArray2 = getMinutesEveryFive(timeArray);
 
@@ -145,7 +145,14 @@ for (let i = 0; i < data4.length; i++) {
         },
       }, 
       xaxis: {
-   
+        title:{
+
+            text:"Zeit in Sekunden"
+          
+        },
+        style:{
+          margin:10,
+        },
         
         categories: timeArray2,
         
