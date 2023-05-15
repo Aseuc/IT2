@@ -59,8 +59,8 @@ for (let i = 0; i < data4.length; i++) {
     chart: {
         fontFamily:'Roboto, sans-serif',
         type: 'line',
-        width: '600px',
-        height: '600px',
+        width: 600,
+        height: 600,
         background: '#859cac'
       },
       title: {

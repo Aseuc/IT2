@@ -4,9 +4,12 @@ body{
   font-family: 'Roboto', sans-serif;
   color: white;
   margin-left: 15rm;
-  
+  overflow-x: hidden!important;
 }
-
+.charts div {
+  display: inline-block;
+  vertical-align: middle;
+}
 
 /* Warnungsicon */
 
