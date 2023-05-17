@@ -499,6 +499,30 @@ function getMinutesEveryFive(array) {
     });
     return result;
   }
+
+
+
+async function loseTeile(){
+  const response= await fetch('https://it2wi1.if-lab.de/rest/mpr_fall4');
+
+  const data = await response.json();
+  console.log(data)
+
+
+
+}
+loseTeile()
+
+
+
+
+
+
+
+
+
+
+
       visualizeData1()
       visualizeData2()
       visualizeData3()
