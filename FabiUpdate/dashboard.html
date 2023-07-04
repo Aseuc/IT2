@@ -2,16 +2,21 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" >
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta http-equiv='cache-control' content='no-cache'>
+  <meta http-equiv='expires' content='0'>
+  <meta http-equiv='pragma' content='no-cache'>
+
   <title>Aufgabe 5</title>
-  
+
   <!-- Schriftart -->
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
 <!-- Bootstrap5  Framework cdn -> damit werden die verschiedenen Funktionen die Bootstrap zur Verfügung stellt importiert damit man diese verwenden kann. -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -29,7 +34,7 @@
   <dialog class="dialogModal" id="succUpdateDialog">
     <p>Update Interval set! <br> Please wait for the countdown to finish for it to take effect</p>
     <form method="dialog">
-      <button class="btn btn-primary" style="float: right;" value="cancel" formmethod="dialog">OK</button>
+      <button class="btn btn-primary" style="float: right; margin-right: 8rem;" value="cancel" formmethod="dialog">OK</button>
     </form>
   </dialog>
   <dialog class="dialogModal" id="yellowLine">
@@ -40,7 +45,8 @@
     </div>
     <p id="tasksYellow">TO-DO: Specify problem</p>
     <form method="dialog">
-      <button class="btn btn-warning" style="float: right;" value="cancel" formmethod="dialog">OK</button>
+      <button class="btn btn-warning" style="float: right; margin-right: 1rem;" value="cancel" formmethod="dialog">OK</button>
+      <button class="btn btn-warning" style="float: right; margin-right: 1rem;" id="open-dialog-btn" formmethod="dialog">Notify Technican</button>
     </form>
   </dialog>
   <dialog class="dialogModal" id="redLine">
@@ -57,16 +63,7 @@
   <dialog class="dialogModal" id="warningModal">
    
   </dialog>    
-  <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="drop()">
-      Set Interval
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item" href="#">Action</a>
-      <a class="dropdown-item" href="#">Another action</a>
-      <a class="dropdown-item" href="#">Something else here</a>
-    </div>
-  </div>
+  
   <!-- navbar: erstellt den oberen Balken der Webanwendung, durch background-color:....; wird die gewünschte Farbe festgelegt. -->
   <nav class="navbar navbar-expand-lg" style="background-color: #314151;">
     <a style="margin-left: 1em;">Dashboard</a>
@@ -84,8 +81,44 @@
     </main>
   </div>  
 
+
+
+
+<!-- Der Dialog -->
+<div id="text-dialog" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Nachricht an den technischen Ansprechpartner</h5>
+     
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+          
+            <textarea type="text-area"        placeholder="Schreiben Sie hier eine Nachricht an die technischen Ansprechpartner!"      style="height: 20rem; width: 29rem;" class="form-control" id="text-input"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button type="button" class="btn btn-secondary" id="close-dialog-btn">Schließen</button>
+        <button type="button" class="btn btn-primary">Absenden</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Der Dialog
+<dialog id="text-dialog">
+  <form>
+    <label for="text-input">Text eingeben:</label><br>
+    <input type="text" id="text-input"><br><br>
+    <button type="submit">Absenden</button>
+    <button type="button" id="close-dialog-btn">Schließen</button>
+  </form>
+</dialog> -->
+
   <!-- Erstellung der Ampel-HTML-Elemente -->
-      <div class="container-fluid">
+    <div class="container-fluid">
         <div class="traffic-light horizontal">
         <div class="light red" id="redlight"></div>
         <div class="light yellow"id="yellowlight"></div>
@@ -116,16 +149,16 @@
           <i class="bi bi-exclamation-triangle-fill"></i>
           <span id="warningBadge" class="position-absolute top-0 start-100 translate-middle badge bg-warning rounded-pill text-dark" style="z-index: 1;"></span>
         </span> 
-        <button type="button"  style="margin-top:1em; 
+        <button type="button"  style=" 
         background-color: #d24525; color: white;" class="btn btn btn-img badge position-relative" id="alert" onclick="showWarnings()"><img src="danger.jpg" >
         </button>       
-        <button type="button" style="margin-top:1em; pointer-events:none; 
+        <button type="button" style=" pointer-events:none; 
         background-color: #217446; color: white;" class="btn btn" id="timer-btn">Timer</button>
-        <button type="button" style="margin-top:1em; pointer-events:none; 
+        <button type="button" style=" pointer-events:none; 
         background-color: #d24525; color: white;" class="btn btn">Eskalation</button>
         </div>
       </div>
-      </div>
+      
       <!-- <div class="parent-container">
       <div id="container1" ondrop="drop(event)" ondragover="allowDrop(event)">
         <div id="draggable" draggable="true" ondragstart="drag(event)"></div>
@@ -151,11 +184,17 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.40.0/apexcharts.min.js" 
       integrity="sha512-Kr1p/vGF2i84dZQTkoYZ2do8xHRaiqIa7ysnDugwoOcG0SbIx98erNekP/qms/hBDiBxj336//77d0dv53Jmew==" 
       crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+      crossorigin="anonymous"></script>
 <!-- Importierung des verwendeten javascript-codes  -->
   <script src="database.js"></script>
   <!-- <script src= "draganddrop.js"></script> -->
   <script src="scripts.js"></script>
   <script src="3djs.js"></script>
+  <!-- Bootstrap JavaScript -->
+
+
 </body>
 
 </html>

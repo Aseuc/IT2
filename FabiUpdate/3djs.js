@@ -3,7 +3,7 @@ const FETCHED_DATA = [[], [], [], []];
 let chart1;
 let chart2;
 let chart3;
-let updateInterval = 10;
+let updateInterval = 1;
 let timeLeft;
 let timerRunning = null;
 let timerWait = false;
@@ -22,6 +22,19 @@ const whiteLight = document.getElementById("whitelight");
 let activeLight = greenLight;
 
 whiteLight.style.opacity = 1;
+
+
+function getCurrentTime() {
+  const date = new Date();
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+}
+
+
+
+
 
 function drop() {
   console.log("Dropped");
@@ -97,6 +110,9 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
   let badgeIcon = document.getElementById("warningBadge");
   console.log("Daten:", data);
 
+
+
+
   switch (dataset) {
     case "Schmiermittelverbrauch – Temperatur":
       let maxSpike1 = 0;
@@ -104,6 +120,7 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
         let tempSpike = data[i + 1] - data[i];
         if (tempSpike > maxSpike1) {
           maxSpike1 = tempSpike;
+          
         }
       }
       if (!leck && maxSpike1 > 2.5) {
@@ -199,6 +216,17 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
       yellowLight.style.opacity = 1;
     }
   }
+
+
+
+
+
+
+
+
+
+
+
 }
 
 async function getData(version) {
@@ -335,21 +363,39 @@ async function visualizeData1() {
   if (updateInterval !== 0) {
     RenderChart(renderData1, [], []);
     //checkForProblems(renderData1[0].title, currentDataY, renderData1[0].toleranzWert, renderData1[0].schadenWert);
-    let i = 1;
+    let i = 0;
     let timeStart = 0;
     while (1) {
       if (updateInterval === 0) {
         break;
       }
       let timeEnd = timeStart + updateInterval;
-      if (timeEnd >= Ydata.length) {
-        break;
+      
+      if(i == timeArray2.length){
+          visualizeData1()
+
+
       }
+      
+    /*   if (timeEnd >= Ydata.length) {
+
+        break;
+      } */
+      /* console.log(getCurrentTime()) */
+
+
+
+
       await sleep(updateInterval * 1000);
-      currentDataX = timeArray2.slice(0, timeEnd);
+      currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
+      
+      
+
+
+
       RenderChart(renderData1, currentDataY, currentDataX);
-      console.log(currentDataX, "\n", currentDataY);
+     /*  console.log(currentDataX, "\n", currentDataY); */
       checkForProblems(
         renderData1[0].title,
         currentDataY,
@@ -358,7 +404,7 @@ async function visualizeData1() {
       );
       if (i === 1) {
         //Grundeisntellung Licht von weiß auf Grün (einmalig)
-        console.log("Go green");
+     /*    console.log("Go green"); */
         whiteLight.style.opacity = 0.3;
         activeLight = greenLight;
         greenLight.style.opacity = 1;
@@ -374,6 +420,13 @@ async function visualizeData1() {
     renderData1[0].toleranzWert,
     renderData1[0].schadenWert
   );
+
+
+
+
+
+
+
 }
 
 async function visualizeData2() {
@@ -411,18 +464,25 @@ async function visualizeData2() {
 
   if (updateInterval !== 0) {
     RenderChart(renderData2, [], []);
-    let i = 1;
+    let i = 0;
+  
     let timeStart = 0;
     while (1) {
       if (updateInterval === 0) {
         break;
       }
       let timeEnd = timeStart + updateInterval;
-      if (timeEnd >= Ydata.length) {
+     /*  if (timeEnd >= Ydata.length) {
         break;
-      }
+      } */
+
+      if(i == timeArray2.length){
+        visualizeData2()
+
+
+    }
       await sleep(updateInterval * 1000);
-      currentDataX = timeArray2.slice(0, timeEnd);
+      currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
       RenderChart(renderData2, currentDataY, currentDataX);
       checkForProblems(
@@ -479,20 +539,32 @@ async function visualizeData3() {
 
   if (updateInterval !== 0) {
     RenderChart(renderData3, [], []);
-    let i = 1;
+    let i = 0
     let timeStart = 0; //Weil in erster Interation updateInterval * 2 nötig
     while (1) {
       if (updateInterval === 0) {
         break;
       }
       let timeEnd = timeStart + updateInterval;
-      if (timeEnd >= Ydata.length) {
+/*       if (timeEnd >= Ydata.length) {
         break;
-      }
+      } */
+
+      if(i == timeArray2.length){
+        visualizeData3()
+
+
+    }
+
+
+
+
       await sleep(updateInterval * 1000);
-      currentDataX = timeArray2.slice(0, timeEnd);
+      currentDataX[i] = getCurrentTime()
       currentDataY = Ydata.slice(0, timeEnd);
+
       RenderChart(renderData3, currentDataY, currentDataX);
+      
       checkForProblems(
         renderData3[0].title,
         currentDataY,
@@ -752,7 +824,7 @@ function showWarnings() {
       inner +
       cardHeader +
       cardBody +
-      '<h5 class="card-title" style="color: red;">' +
+      '<h5 class="card-title" style="color: green;">' +
       "All good" +
       "</h5>" +
       '<p class="card-text" style="line-height: 2;">' +
@@ -767,7 +839,7 @@ function showWarnings() {
         inner +
         cardHeader +
         cardBody +
-        '<h5 class="card-title" style="color: yellow;">' +
+        '<h5 class="card-title" style="color: #e0eb44;">' +
         "Check oil" +
         "</h5>" +
         '<p class="card-text" style="line-height: 2;">' +
@@ -782,7 +854,7 @@ function showWarnings() {
         inner +
         cardHeader +
         cardBody +
-        '<h5 class="card-title" style="color: yellow;">' +
+        '<h5 class="card-title" style="color:#e0eb44;">' +
         "Check ball-bearings" +
         "</h5>" +
         '<p class="card-text" style="line-height: 2;">' +
@@ -839,11 +911,80 @@ function showWarnings() {
   inner =
     inner +
     '<form method="dialog" style="margin-top: 30px;">' +
-    '<button class="btn btn-warning" style="float: right;" value="cancel" formmethod="dialog">OK</button>' +
+    '<button class="btn btn-warning" style="float: right; margin-right: 4rem;" value="cancel" formmethod="dialog">OK</button>' +
     "</form>";
   targetModal.showModal();
   targetModal.innerHTML = inner;
 }
+
+
+/* 
+// Zugriff auf das Modal-Element
+const textDialog = document.querySelector('#text-dialog');
+
+// Erstellen einer Instanz des Modal-Objekts
+const textDialogModal = new bootstrap.Modal(textDialog);
+
+// Öffnen des Modals
+textDialogModal.show(); */
+
+
+
+    // // Zugriff auf die Elemente
+    // const dialog = document.querySelector('#text-dialog');
+    // const openDialogBtn = document.querySelector('#open-dialog-btn');
+    // const closeDialogBtn = document.querySelector('#close-dialog-btn');
+    // let dialog2 = document.getElementById("yellowLine");
+    // // Öffnen des Dialogs beim Klicken auf den Button
+    // openDialogBtn.addEventListener('click', () => {
+    //   dialog.showModal();
+    // });
+  
+    // // Schließen des Dialogs beim Klicken auf den Schließen-Button
+    // closeDialogBtn.addEventListener('click', () => {
+    //   dialog2.showModal();
+    //   dialog.close();
+    // });
+
+    const dialog = document.querySelector('#text-dialog');
+    const openDialogBtn = document.querySelector('#open-dialog-btn');
+    const closeDialogBtn = document.querySelector('#close-dialog-btn');
+    const dialog2 = document.querySelector('#yellowLine');
+    // Öffnen des Dialogs beim Klicken auf den Button
+    openDialogBtn.addEventListener('click', () => {
+      dialog.style.display = 'block';
+    });
+  
+    // Schließen des Dialogs beim Klicken auf den Schließen-Button
+    closeDialogBtn.addEventListener('click', () => {
+      dialog2.showModal();
+      dialog.style.display = 'none';
+      
+    });
+ 
+
+/*     function openTextDialog() {
+      // Zugriff auf das Modal-Element
+      const textDialog = document.querySelector('#text-dialog');
+    
+      // Erstellen einer Instanz des Modal-Objekts
+      const textDialogModal = new bootstrap.Modal(textDialog);
+    
+      // Öffnen des Modals
+      textDialogModal.show();
+    }
+    
+// Zugriff auf den Button
+const openDialogBtn = document.querySelector('#open-dialog-btn');
+
+// Hinzufügen eines Event-Listeners zum Button
+openDialogBtn.addEventListener('click', () => {
+  openTextDialog();
+});
+ */
+
+
+
 
 visualizeData1();
 visualizeData2();
