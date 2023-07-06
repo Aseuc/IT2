@@ -14,7 +14,7 @@ let weakBalljoints = false;
 let leck = false;
 let weakOil = false;
 let lose = false;
-let machineStopped = false; 
+let machineStopped = false;
 const redLight = document.getElementById("redlight");
 const yellowLight = document.getElementById("yellowlight");
 const greenLight = document.getElementById("greenlight");
@@ -24,24 +24,34 @@ let btnContinue = document.getElementById("btnContinue");
 let btnStopMachine = document.getElementById("btnStopMachine");
 whiteLight.style.opacity = 1;
 
+function closeDialogAfterDelay(dialogId) {
+  let dialog = document.getElementById(dialogId);
+  let timeLeft = 10;
+  dialog.showModal();
+  let timer = setInterval(function () {
+    if (timeLeft == 0) {
+      clearInterval(timer);
+      document.getElementById("timer").innerHTML = "Anzeige wird geschlossen!";
+      dialog.close();
+    } else {
+      document.getElementById("timer").innerHTML =
+        "Anzeige wird in " + timeLeft + " Sekunden geschlossen!";
+    }
+    timeLeft -= 1;
+  }, 1000);
+}
 
 function getCurrentTime() {
   const date = new Date();
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const seconds = date.getSeconds().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const seconds = date.getSeconds().toString().padStart(2, "0");
   return `${hours}:${minutes}:${seconds}`;
 }
-
-
-
-
-
 function drop() {
-/*   console.log("Dropped"); */
+  /*   console.log("Dropped"); */
   $(".dropdown-toggle").dropdown();
 }
-
 function timer() {
   if (timerRunning) {
     timerWait = true;
@@ -64,40 +74,25 @@ function timer() {
     }
   }, 1000);
 }
+async function countdownTimer() {
+  let timeLeft = 5;
 
-
-
-
-
-
-/* async function countdownTimer() {
-  let timeLeft = 10;
-
-  let timer = setInterval(function() {
-    if(timeLeft <= 0) {
+  let timer = setInterval(function () {
+    if (timeLeft <= 0) {
       clearInterval(timer);
-      document.getElementById('timer').innerHTML = 'Zeit abgelaufen!';
+      document.getElementById("timer").innerHTML = "Zeit abgelaufen!";
     } else {
-      document.getElementById('timer').innerHTML = timeLeft + ' Sekunden verbleibend';
+      document.getElementById("timer").innerHTML =
+        timeLeft + " Sekunden verbleibend";
     }
     timeLeft -= 1;
   }, 1000);
-} */
-
-
-
+}
 function reloadPage() {
   location.reload();
 }
-
-
-
-
-
-
-
 function selectInterval(item_id) {
-/*   console.log(item_id); */
+  /*   console.log(item_id); */
   switch (item_id) {
     case "5s":
       updateInterval = 5;
@@ -131,27 +126,16 @@ function selectInterval(item_id) {
   let dialog = document.getElementById("succUpdateDialog");
   dialog.showModal();
 }
-
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
-
 function sleepCheckMachine(ms) {
-  
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
-
-
 async function checkForProblems(dataset, data, thresholdA, thresholdB) {
   //let min = Math.min.apply(Math, data);
   let max = Math.max.apply(Math, data);
   let badgeIcon = document.getElementById("warningBadge");
-
-
-
-
 
   switch (dataset) {
     case "Schmiermittelverbrauch – Temperatur":
@@ -160,11 +144,10 @@ async function checkForProblems(dataset, data, thresholdA, thresholdB) {
         let tempSpike = data[i + 1] - data[i];
         if (tempSpike > maxSpike1) {
           maxSpike1 = tempSpike;
-          
         }
       }
       if (!leck && maxSpike1 > 2.5) {
-  /*       console.log("Leck"); */
+        /*       console.log("Leck"); */
         warnings = warnings + 1;
         badgeIcon.innerText = warnings;
         leck = true;
@@ -181,7 +164,7 @@ async function checkForProblems(dataset, data, thresholdA, thresholdB) {
         }
       }
       if (!bruch && maxSpike2 > 5) {
-/*         console.log("Bruch: ", maxSpike2); */
+        /*         console.log("Bruch: ", maxSpike2); */
         warnings = warnings + 1;
         badgeIcon.innerText = warnings;
         bruch = true;
@@ -202,7 +185,7 @@ async function checkForProblems(dataset, data, thresholdA, thresholdB) {
         }
       }
       if (!lose && maxSpike3 >= 0.3) {
-/*         console.log("Lose Teile: ", maxSpike3); */
+        /*         console.log("Lose Teile: ", maxSpike3); */
         warnings = warnings + 1;
         badgeIcon.innerText = warnings;
         lose = true;
@@ -211,66 +194,53 @@ async function checkForProblems(dataset, data, thresholdA, thresholdB) {
         break;
       }
     default:
-/*       console.log("Not recognized"); */
+    /*       console.log("Not recognized"); */
   }
 
   if (max > thresholdB) {
-/*     countdownTimer() */
+    /*     countdownTimer() */
     machineStopped = true;
-/*     console.log("Red line excedded: ", dataset); */
+    /*     console.log("Red line excedded: ", dataset); */
     let dialog = document.getElementById("redLine");
     let tasksRed = document.getElementById("tasksRed1");
     let tasksRed2 = document.getElementById("tasksRed2");
-    let tasksRed3= document.getElementById("tasksRed3");
+    let tasksRed3 = document.getElementById("tasksRed3");
     let tasksRed4 = document.getElementById("tasksRed4");
     if (dialog !== null && dialog.open.id != dataset) {
-
       dialog.showModal();
-      
+
       dialog.id = dataset;
     } else {
-     /*  console.log("Dialog is already displaying"); */
+      /*  console.log("Dialog is already displaying"); */
     }
 
-
-
     let nameField = document.getElementById("placerholderRed");
-    
+
     if (activeLight !== redLight) {
       activeLight.style.opacity = 0.3;
       activeLight = redLight;
       redLight.style.opacity = 1;
     }
 
-
-    console.log(dataset)
-    if (dataset === "Schmiermittelverbrauch – Temperatur")
-    {tasksRed.innerHTML = "Step 1: Check for leaks!"
-      tasksRed2.innerHTML = "Step 2: Clean motor!"
-      tasksRed3.innerHTML = "Step 3: Change Oil!"  
-  } else if (dataset === "Anlageninnenleben – Vibration und Akustik"){
-
-    tasksRed.innerHTML = "Step 1: Check for foreign objects!"
-    tasksRed2.innerHTML = "Step 2: Check for wear!"
-    tasksRed3.innerHTML = "Step 3: Perform maintenance!"
-
-  } else if (dataset === "Kugellagerlauf – Vibration und Akustik"){
-
-    tasksRed.innerHTML = "Step 1: Check the bearing for wear!"
-    tasksRed2.innerHTML = "Step 2: Check the bearing for contamination!"
-    tasksRed3.innerHTML = "Step 3: Add lubricant!"
-    tasksRed4.innerHTML = "Step 4: Replace the bearing!"
-
-  }
-
-
-
-
-
+    console.log(dataset);
+    if (dataset === "Schmiermittelverbrauch – Temperatur") {
+      tasksRed.innerHTML = "Step 1: Check for leaks!";
+      tasksRed2.innerHTML = "Step 2: Clean motor!";
+      tasksRed3.innerHTML = "Step 3: Change Oil!";
+    } else if (dataset === "Anlageninnenleben – Vibration und Akustik") {
+      tasksRed.innerHTML = "Step 1: Check for foreign objects!";
+      tasksRed2.innerHTML = "Step 2: Check for wear!";
+      tasksRed3.innerHTML = "Step 3: Perform maintenance!";
+    } else if (dataset === "Kugellagerlauf – Vibration und Akustik") {
+      tasksRed.innerHTML = "Step 1: Check the bearing for wear!";
+      tasksRed2.innerHTML = "Step 2: Check the bearing for contamination!";
+      tasksRed3.innerHTML = "Step 3: Add lubricant!";
+      tasksRed4.innerHTML = "Step 4: Replace the bearing!";
+    }
 
     nameField.innerHTML = '"' + dataset + '"';
   } else if (max > thresholdA) {
-/*     console.log("Yellow line excedded: ", dataset); */
+    /*     console.log("Yellow line excedded: ", dataset); */
     if (dataset === "Schmiermittelverbrauch – Temperatur" && !weakOil) {
       warnings = warnings + 1;
       badgeIcon.innerText = warnings;
@@ -278,10 +248,10 @@ async function checkForProblems(dataset, data, thresholdA, thresholdB) {
     }
     let dialog = document.getElementById("yellowLine");
     if (dialog !== null && dialog.open.id != dataset) {
-      dialog.showModal();
+      closeDialogAfterDelay("yellowLine");
       dialog.id = dataset;
     } else {
-/*       console.log("Dialog is already displaying"); */
+      /*       console.log("Dialog is already displaying"); */
     }
 
     let nameField = document.getElementById("placerholderYellow");
@@ -294,42 +264,30 @@ async function checkForProblems(dataset, data, thresholdA, thresholdB) {
     }
   }
 }
-
-
-
-function stopMachine(){
-machineStopped = true;
-return machineStopped; 
+function stopMachine() {
+  machineStopped = true;
+  return machineStopped;
 }
-
-function continueMachine() { machineStopped = false; return machineStopped; }
-
-
-
-
-
-
-
-
-
-
-
+function continueMachine() {
+  machineStopped = false;
+  return machineStopped;
+}
 async function getData(version) {
   let response = [];
 
-  let randmonDataSet =  Math.floor(Math.random() * 4); 
+  let randmonDataSet = Math.floor(Math.random() * 4);
   switch (randmonDataSet) {
     case 0:
       if (FETCHED_DATA[0].length === 0) {
-/*         console.log(FETCHED_DATA[0]); */
+        /*         console.log(FETCHED_DATA[0]); */
         response = await (
           await fetch("https://it2wi1.if-lab.de/rest/mpr_fall1")
         ).json();
-/*         console.log("Fall1") */
+        /*         console.log("Fall1") */
         FETCHED_DATA[0] = response;
       } else {
         response = FETCHED_DATA[0];
-/*         console.log("Buffer 0: ", FETCHED_DATA); */
+        /*         console.log("Buffer 0: ", FETCHED_DATA); */
       }
       break;
 
@@ -340,52 +298,49 @@ async function getData(version) {
           await fetch("https://it2wi1.if-lab.de/rest/mpr_fall2")
         ).json();
         FETCHED_DATA[1] = response;
-/*         console.log("Fall2") */
+        /*         console.log("Fall2") */
       } else {
         response = FETCHED_DATA[1];
-/*         console.log("Buffer 1: ", FETCHED_DATA); */
+        /*         console.log("Buffer 1: ", FETCHED_DATA); */
       }
       break;
 
     case 2:
       if (FETCHED_DATA[2].length === 0) {
-/*         console.log(FETCHED_DATA[2]); */
+        /*         console.log(FETCHED_DATA[2]); */
         response = await (
           await fetch("https://it2wi1.if-lab.de/rest/mpr_fall3")
-        
         ).json();
-/*         console.log("Fall3") */
+        /*         console.log("Fall3") */
         FETCHED_DATA[2] = response;
       } else {
         response = FETCHED_DATA[2];
-/*         console.log("Buffer 2: ", FETCHED_DATA); */
+        /*         console.log("Buffer 2: ", FETCHED_DATA); */
       }
       break;
 
     case 3:
       if (FETCHED_DATA[3].length === 0) {
-/*         console.log(FETCHED_DATA[3]); */
+        /*         console.log(FETCHED_DATA[3]); */
         response = await (
           await fetch("https://it2wi1.if-lab.de/rest/mpr_fall4")
         ).json();
-/*         console.log("Fall4") */
+        /*         console.log("Fall4") */
         FETCHED_DATA[3] = response;
       } else {
         response = FETCHED_DATA[3];
-/*         console.log("Buffer 3: ", FETCHED_DATA); */
+        /*         console.log("Buffer 3: ", FETCHED_DATA); */
       }
       break;
 
     default:
-/*       console.log("Fatal error getting data"); */
+    /*       console.log("Fatal error getting data"); */
   }
 
-/*   console.log("FETCH: ", FETCHED_DATA[0].length); */
+  /*   console.log("FETCH: ", FETCHED_DATA[0].length); */
 
-        
   return getDataPoints(response, version);
 }
-
 async function getDataPoints(dataSet, version) {
   XData = [];
   YData = [];
@@ -412,11 +367,10 @@ async function getDataPoints(dataSet, version) {
       }
       break;
     default:
-/*       console.log("Unknown Parsing type"); */
+    /*       console.log("Unknown Parsing type"); */
   }
   return [XData, YData];
 }
-
 async function visualizeData1() {
   renderData1 = [
     {
@@ -433,8 +387,8 @@ async function visualizeData1() {
       offsetX_S: 140,
       offsetX_T: 127,
       min: 0,
-      max: 300,
-    },
+      max: 300
+    }
   ];
 
   let rawData = await getData("temperatur");
@@ -449,7 +403,7 @@ async function visualizeData1() {
     return value.replace(",", ".");
   });
   let currentDataY = Ydata.slice(0, 10);
-/*   console.log("X: ", timeArray2); */
+  /*   console.log("X: ", timeArray2); */
 
   if (updateInterval !== 0) {
     RenderChart(renderData1, [], []);
@@ -457,29 +411,21 @@ async function visualizeData1() {
     let i = 0;
     let timeStart = 0;
     while (1) {
-
       if (updateInterval === 0) {
         break;
       }
       let timeEnd = timeStart + updateInterval;
-      
-      if(i == timeArray2.length){
-          visualizeData1()
 
-
+      if (i == timeArray2.length) {
+        visualizeData1();
       }
-      
 
       await sleep(updateInterval * 1000);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
-      
-      
-
-
 
       RenderChart(renderData1, currentDataY, currentDataX);
-     /*  console.log(currentDataX, "\n", currentDataY); */
+      /*  console.log(currentDataX, "\n", currentDataY); */
       checkForProblems(
         renderData1[0].title,
         currentDataY,
@@ -488,7 +434,7 @@ async function visualizeData1() {
       );
       if (i === 1) {
         //Grundeisntellung Licht von weiß auf Grün (einmalig)
-     /*    console.log("Go green"); */
+        /*    console.log("Go green"); */
         whiteLight.style.opacity = 0.3;
         activeLight = greenLight;
         greenLight.style.opacity = 1;
@@ -505,7 +451,6 @@ async function visualizeData1() {
     renderData1[0].schadenWert
   );
 }
-
 async function visualizeData2() {
   renderData2 = [
     {
@@ -522,8 +467,8 @@ async function visualizeData2() {
       offsetX_S: 134,
       offsetX_T: 121,
       min: 0,
-      max: 300,
-    },
+      max: 300
+    }
   ];
 
   let rawData = await getData("laut");
@@ -542,21 +487,19 @@ async function visualizeData2() {
   if (updateInterval !== 0) {
     RenderChart(renderData2, [], []);
     let i = 0;
-  
+
     let timeStart = 0;
     while (1) {
-/*       if (machineStopped == true) {return } */
+      /*       if (machineStopped == true) {return } */
       if (updateInterval === 0) {
         break;
       }
-    
+
       let timeEnd = timeStart + updateInterval;
-    
-      if(i == timeArray2.length){
-        visualizeData2()
 
-
-    }
+      if (i == timeArray2.length) {
+        visualizeData2();
+      }
       await sleep(updateInterval * 1000);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
@@ -579,7 +522,6 @@ async function visualizeData2() {
     renderData2[0].schadenWert
   );
 }
-
 async function visualizeData3() {
   renderData3 = [
     {
@@ -596,8 +538,8 @@ async function visualizeData3() {
       offsetX_S: 155,
       offsetX_T: 150,
       min: 0.0,
-      max: 1.0,
-    },
+      max: 1.0
+    }
   ];
 
   let rawData = await getData("vibration");
@@ -615,30 +557,28 @@ async function visualizeData3() {
 
   if (updateInterval !== 0) {
     RenderChart(renderData3, [], []);
-    let i = 0
+    let i = 0;
     let timeStart = 0; //Weil in erster Interation updateInterval * 2 nötig
     while (1) {
-/*       if (machineStopped == true) {return } */
+      /*       if (machineStopped == true) {return } */
       if (updateInterval === 0) {
         break;
       }
       let timeEnd = timeStart + updateInterval;
-/*       if (timeEnd >= Ydata.length) {
+      /*       if (timeEnd >= Ydata.length) {
         break;
       } */
 
-      if(i == timeArray2.length){
-        visualizeData3()
+      if (i == timeArray2.length) {
+        visualizeData3();
+      }
 
-
-    }
-
-    await sleep(updateInterval * 1000);
-      currentDataX[i] = getCurrentTime()
+      await sleep(updateInterval * 1000);
+      currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
 
       RenderChart(renderData3, currentDataY, currentDataX);
-      
+
       checkForProblems(
         renderData3[0].title,
         currentDataY,
@@ -657,225 +597,220 @@ async function visualizeData3() {
     renderData3[0].schadenWert
   );
 }
-
 function RenderChart(renderData, YData, timeArray2) {
-
-
-  if(machineStopped == false){
+  if (machineStopped == false) {
     if (renderData[0].chartID === 1) {
-    if (chart1 !== undefined) {
-      chart1.updateSeries([
-        {
-          data: YData,
-        },
-      ]);
-      chart1.updateOptions({
-        xaxis: {
-          title: {
-            text: "Zeit in Sekunden",
-          },
-          labels: {},
-          categories: timeArray2,
-        },
-      });
-      return;
-    }
-  } else if (renderData[0].chartID === 2) {
-    if (chart2 !== undefined) {
-      chart2.updateSeries([
-        {
-          data: YData,
-        },
-      ]);
-      chart2.updateOptions({
-        xaxis: {
-          title: {
-            text: "Zeit in Sekunden",
-          },
-          labels: {},
-          categories: timeArray2,
-        },
-      });
-      return;
-    }
-  } else {
-    if (chart3 !== undefined) {
-      chart3.updateSeries([
-        {
-          data: YData,
-        },
-      ]);
-      chart3.updateOptions({
-        xaxis: {
-          title: {
-            text: "Zeit in Sekunden",
-          },
-          labels: {},
-          categories: timeArray2,
-        },
-      });
-      return;
-    }
-  }
-
-/*   console.log("Render: ", renderData[0].title); */
-  const options = {
-    toolbar: {
-      tools: {
-        pan: true,
-      },
-    },
-    chart: {
-      fontFamily: "Roboto, sans-serif",
-      type: "line",
-      width: 600,
-      height: 600,
-      background: "#859cac",
-    },
-    title: {
-      text: renderData[0].title,
-      align: "center",
-      margin: 10,
-      floating: false,
-      style: {
-        fontSize: "15px",
-        fontWeight: "bold",
-        color: "#263238",
-      },
-    },
-    zoom: {
-      enabled: true,
-    },
-    tooltip: {
-      theme: "dark",
-      y: {
-        formatter: function (
-          value,
-          { series, seriesIndex, dataPointIndex, w }
-        ) {
-          switch (renderData[0].chartID) {
-            case 3:
-              if (value.toFixed(4) >= renderData[0].schadenWert) {
-                return renderData[0].schaden + value.toFixed(4);
-              } else if (value.toFixed(4) >= renderData[0].toleranzWert) {
-                return renderData[0].toleranz + value.toFixed(4);
-              } else {
-                return renderData[0].innenleben + value.toFixed(4);
-              }
-            default:
-              if (value >= renderData[0].schadenWert) {
-                return renderData[0].schaden + value;
-              } else if (value >= renderData[0].toleranzWert) {
-                return renderData[0].toleranz + value;
-              } else {
-                return renderData[0].innenleben + value;
-              }
+      if (chart1 !== undefined) {
+        chart1.updateSeries([
+          {
+            data: YData
           }
-        },
+        ]);
+        chart1.updateOptions({
+          xaxis: {
+            title: {
+              text: "Zeit in Sekunden"
+            },
+            labels: {},
+            categories: timeArray2
+          }
+        });
+        return;
+      }
+    } else if (renderData[0].chartID === 2) {
+      if (chart2 !== undefined) {
+        chart2.updateSeries([
+          {
+            data: YData
+          }
+        ]);
+        chart2.updateOptions({
+          xaxis: {
+            title: {
+              text: "Zeit in Sekunden"
+            },
+            labels: {},
+            categories: timeArray2
+          }
+        });
+        return;
+      }
+    } else {
+      if (chart3 !== undefined) {
+        chart3.updateSeries([
+          {
+            data: YData
+          }
+        ]);
+        chart3.updateOptions({
+          xaxis: {
+            title: {
+              text: "Zeit in Sekunden"
+            },
+            labels: {},
+            categories: timeArray2
+          }
+        });
+        return;
+      }
+    }
+
+    /*   console.log("Render: ", renderData[0].title); */
+    const options = {
+      toolbar: {
+        tools: {
+          pan: true
+        }
       },
-      style: {
-        backgroundColor: "FF0099",
+      chart: {
+        fontFamily: "Roboto, sans-serif",
+        type: "line",
+        width: 600,
+        height: 600,
+        background: "#859cac"
       },
-    },
-    series: [
-      {
-        name: "",
-        data: YData,
-      },
-    ],
-    annotations: {
-      yaxis: [
-        {
-          y: renderData[0].max,
-          y2: renderData[0].schadenWert,
-          borderColor: "red",
-          fillColor: "red",
-          label: {
-            text: "Sehr sehr schlecht",
-            position: "left",
-            offsetX: 95,
-          },
-        },
-        {
-          y: renderData[0].schadenWert,
-          y2: renderData[0].toleranzWert,
-          borderColor: "yellow",
-          fillColor: "yellow",
-          label: {
-            text: renderData[0].schadenText,
-            position: "left",
-            offsetX: renderData[0].offsetX_S,
-          },
-        },
-        {
-          y: renderData[0].toleranzWert,
-          borderColor: "yellow",
-          fillColor: "yellow",
-          label: {
-            text: renderData[0].toleranzText,
-            position: "left",
-            offsetX: renderData[0].offsetX_T,
-          },
-        },
-      ],
-    },
-    yaxis: {
-      min: renderData[0].min,
-      max: renderData[0].max,
       title: {
-        text: renderData[0].yText,
+        text: renderData[0].title,
+        align: "center",
+        margin: 10,
+        floating: false,
         style: {
           fontSize: "15px",
+          fontWeight: "bold",
+          color: "#263238"
+        }
+      },
+      zoom: {
+        enabled: true
+      },
+      tooltip: {
+        theme: "dark",
+        y: {
+          formatter: function (
+            value,
+            { series, seriesIndex, dataPointIndex, w }
+          ) {
+            switch (renderData[0].chartID) {
+              case 3:
+                if (value.toFixed(4) >= renderData[0].schadenWert) {
+                  return renderData[0].schaden + value.toFixed(4);
+                } else if (value.toFixed(4) >= renderData[0].toleranzWert) {
+                  return renderData[0].toleranz + value.toFixed(4);
+                } else {
+                  return renderData[0].innenleben + value.toFixed(4);
+                }
+              default:
+                if (value >= renderData[0].schadenWert) {
+                  return renderData[0].schaden + value;
+                } else if (value >= renderData[0].toleranzWert) {
+                  return renderData[0].toleranz + value;
+                } else {
+                  return renderData[0].innenleben + value;
+                }
+            }
+          }
         },
+        style: {
+          backgroundColor: "FF0099"
+        }
       },
-    },
-    xaxis: {
-      title: {
-        text: "Zeit in Sekunden",
+      series: [
+        {
+          name: "",
+          data: YData
+        }
+      ],
+      annotations: {
+        yaxis: [
+          {
+            y: renderData[0].max,
+            y2: renderData[0].schadenWert,
+            borderColor: "red",
+            fillColor: "red",
+            label: {
+              text: "Sehr sehr schlecht",
+              position: "left",
+              offsetX: 95
+            }
+          },
+          {
+            y: renderData[0].schadenWert,
+            y2: renderData[0].toleranzWert,
+            borderColor: "yellow",
+            fillColor: "yellow",
+            label: {
+              text: renderData[0].schadenText,
+              position: "left",
+              offsetX: renderData[0].offsetX_S
+            }
+          },
+          {
+            y: renderData[0].toleranzWert,
+            borderColor: "yellow",
+            fillColor: "yellow",
+            label: {
+              text: renderData[0].toleranzText,
+              position: "left",
+              offsetX: renderData[0].offsetX_T
+            }
+          }
+        ]
       },
-      labels: {},
-      categories: timeArray2,
-    },
-    noData: {
-      text: "Please wait while we fetch data...",
-      style: {
-        fontSize: "30px",
-        fontWeight: "bold",
+      yaxis: {
+        min: renderData[0].min,
+        max: renderData[0].max,
+        title: {
+          text: renderData[0].yText,
+          style: {
+            fontSize: "15px"
+          }
+        }
       },
-    },
-  };
+      xaxis: {
+        title: {
+          text: "Zeit in Sekunden"
+        },
+        labels: {},
+        categories: timeArray2
+      },
+      noData: {
+        text: "Please wait while we fetch data...",
+        style: {
+          fontSize: "30px",
+          fontWeight: "bold"
+        }
+      }
+    };
 
-  if (renderData[0].chartID === 1) {
-    chart1 = new ApexCharts(document.querySelector("#chart1"), options);
- /*    console.log("Render 1"); */
-    chart1.render();
-  } else if (renderData[0].chartID === 2) {
-    chart2 = new ApexCharts(document.querySelector("#chart2"), options);
-/*     console.log("Render 2"); */
-    chart2.render();
+    if (renderData[0].chartID === 1) {
+      chart1 = new ApexCharts(document.querySelector("#chart1"), options);
+      /*    console.log("Render 1"); */
+      chart1.render();
+    } else if (renderData[0].chartID === 2) {
+      chart2 = new ApexCharts(document.querySelector("#chart2"), options);
+      /*     console.log("Render 2"); */
+      chart2.render();
+    } else {
+      chart3 = new ApexCharts(document.querySelector("#chart3"), options);
+      /*     console.log("Render 3"); */
+      chart3.render();
+    }
   } else {
-    chart3 = new ApexCharts(document.querySelector("#chart3"), options);
-/*     console.log("Render 3"); */
-    chart3.render();
+    renderData = [];
   }
-}else{
-renderData =[]
 }
-}
-
 function getSecondsEveryFive(array) {
   const result = [];
   array.forEach((time) => {
     const seconds = parseInt(time.split(":")[2], 10);
 
     if (seconds % 5 === 0) {
-/*       console.log(result); */
+      /*       console.log(result); */
       result.push(time);
     }
   });
   return result;
 }
-
 function getMinutesEveryFive(array) {
   const result = [];
   array.forEach((time) => {
@@ -887,7 +822,6 @@ function getMinutesEveryFive(array) {
   });
   return result;
 }
-
 function showWarnings() {
   let targetModal = document.getElementById("warningModal");
   let inner = "All problems are listed below:<br>";
@@ -897,7 +831,7 @@ function showWarnings() {
   let cardEnd = "</div></div>";
 
   if (warnings === 0) {
-/*     console.log("Warning pressed"); */
+    /*     console.log("Warning pressed"); */
     let text =
       "There are no signs of failures within the machine. <br> Keep monitoring the setup closely.";
     inner =
@@ -997,75 +931,10 @@ function showWarnings() {
   targetModal.innerHTML = inner;
 }
 
-
-/* 
-// Zugriff auf das Modal-Element
-const textDialog = document.querySelector('#text-dialog');
-
-// Erstellen einer Instanz des Modal-Objekts
-const textDialogModal = new bootstrap.Modal(textDialog);
-
-// Öffnen des Modals
-textDialogModal.show(); */
-
-
-
-    // // Zugriff auf die Elemente
-    // const dialog = document.querySelector('#text-dialog');
-    // const openDialogBtn = document.querySelector('#open-dialog-btn');
-    // const closeDialogBtn = document.querySelector('#close-dialog-btn');
-    // let dialog2 = document.getElementById("yellowLine");
-    // // Öffnen des Dialogs beim Klicken auf den Button
-    // openDialogBtn.addEventListener('click', () => {
-    //   dialog.showModal();
-    // });
-  
-    // // Schließen des Dialogs beim Klicken auf den Schließen-Button
-    // closeDialogBtn.addEventListener('click', () => {
-    //   dialog2.showModal();
-    //   dialog.close();
-    // });
-
-    const dialog = document.querySelector('#text-dialog');
-    const openDialogBtn = document.querySelector('#open-dialog-btn');
-    const closeDialogBtn = document.querySelector('#close-dialog-btn');
-    const dialog2 = document.querySelector('#yellowLine');
-    // Öffnen des Dialogs beim Klicken auf den Button
-    openDialogBtn.addEventListener('click', () => {
-      dialog.style.display = 'block';
-    });
-  
-    // Schließen des Dialogs beim Klicken auf den Schließen-Button
-    closeDialogBtn.addEventListener('click', () => {
-      dialog2.showModal();
-      dialog.style.display = 'none';
-      
-    });
- 
-
-/*     function openTextDialog() {
-      // Zugriff auf das Modal-Element
-      const textDialog = document.querySelector('#text-dialog');
-    
-      // Erstellen einer Instanz des Modal-Objekts
-      const textDialogModal = new bootstrap.Modal(textDialog);
-    
-      // Öffnen des Modals
-      textDialogModal.show();
-    }
-    
-// Zugriff auf den Button
-const openDialogBtn = document.querySelector('#open-dialog-btn');
-
-// Hinzufügen eines Event-Listeners zum Button
-openDialogBtn.addEventListener('click', () => {
-  openTextDialog();
-});
- */
-
-
-
-
+const dialog = document.querySelector("#text-dialog");
+const openDialogBtn = document.querySelector("#open-dialog-btn");
+const closeDialogBtn = document.querySelector("#close-dialog-btn");
+const dialog2 = document.querySelector("#yellowLine");
 visualizeData1();
 visualizeData2();
 visualizeData3();
