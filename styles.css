@@ -30,8 +30,8 @@ body{
 }
 
 #alert {
-  width: 2.5em;
-  height: 2.5em;
+  width: 3em;
+  height: 3em;
   border-radius: 25px;
   margin-right: 1em;
   margin-top: 1em;
@@ -124,11 +124,85 @@ body{
 .apexcharts-menu{
   background-color: #27293d!important;
   border: 0px;
-  }
+}
 
 
 
 .charts{
 text-align: center;
+}
 
+ /* Dropdown Button */
+ .dropbtn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 80px;
+  margin-left: 2rem;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-right: 1em;
+  margin-bottom: 1rem;
+  z-index: 100;
+  border-radius: 1rem;
+  
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 100;
+  border-radius: 1rem;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  z-index: 100;
+  border-radius: 1rem;
+  
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+.dialogModal {
+  border: none;
+  font-family: 'Roboto', sans-serif;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  text-align: center;
+}
+
+#tasksRed {
+  text-align: left;
+}
+
+#tasksYellow {
+  text-align: left;
+}
+
+#warningModal {
+  padding: 2.5%;
 }

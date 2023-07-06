@@ -2,15 +2,21 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" >
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta http-equiv='cache-control' content='no-cache'>
+  <meta http-equiv='expires' content='0'>
+  <meta http-equiv='pragma' content='no-cache'>
+
   <title>Aufgabe 5</title>
-  
+
   <!-- Schriftart -->
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
 <!-- Bootstrap5  Framework cdn -> damit werden die verschiedenen Funktionen die Bootstrap zur Verfügung stellt importiert damit man diese verwenden kann. -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -19,11 +25,53 @@
 
   <!-- Custom CSS: Hier importiere ich die style.css womit die HTMl Elemente verschönert, geformt... werden -->
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 </head>
 
 <!-- Durch background-color:...; im Tag <body> wird die gewünschte Hintergrundfarbe festgelegt -->
 <body onload="timer()" style="background-color: #717e87;">
+  <dialog class="dialogModal" id="succUpdateDialog">
+    <p>Update Interval set! <br> Please wait for the countdown to finish for it to take effect</p>
+    <form method="dialog">
+      <button class="btn btn-primary" style="float: right; margin-right: 8rem;" value="cancel" formmethod="dialog">OK</button>
+    </form>
+  </dialog>
+  <dialog class="dialogModal" id="yellowLine">
+    <div id="containerBlockYellowText">
+      <p>It looks like you should be monitoring the</p>
+      <p id="placerholderYellow"></p>
+      <p>closly and take the necessary actions! </p>
+    </div>
+    <p id="timer"></p>
+    <p id="tasksYellow">TO-DO: Specify problem</p>
+
+    <form method="dialog">
+      <button class="btn btn-warning" style="float: right; margin-right: 1rem;" value="cancel" formmethod="dialog">OK</button>
+      <button class="btn btn-warning" style="float: right; margin-right: 1rem;" id="open-dialog-btn" formmethod="dialog">Notify Technican</button>
+    </form>
+  </dialog>
+  <dialog class="dialogModal" id="redLine" style="text-align: center;">
+    <div id="containerBlockRedText" style="display: inline;">
+      <p>Warning! Your </p>
+      <p id="placerholderRed"></p>
+      <p> is exceeding it's designed specification!</p>
+    </div>
+    <p id="tasksRed1"></p>
+    <p id="tasksRed2"></p>
+    <p id="tasksRed3"></p>
+    <p id="tasksRed4"></p>
+    <p id="tasksRed5"></p>
+    <p>If all problems are solved click "Restart Machine"!</p>
+    <form method="dialog" style="text-align: center;">
+      <button class="btn btn-danger" id="btnStopMachine" style="float: right; text-align: center;" value="cancel" formmethod="dialog" onclick="reloadPage()">Restart Machine</button>
+      
+    </form>
+  </dialog>
+  <dialog class="dialogModal" id="warningModal">
+   
+  </dialog>    
+  
   <!-- navbar: erstellt den oberen Balken der Webanwendung, durch background-color:....; wird die gewünschte Farbe festgelegt. -->
   <nav class="navbar navbar-expand-lg" style="background-color: #314151;">
     <a style="margin-left: 1em;">Dashboard</a>
@@ -41,23 +89,84 @@
     </main>
   </div>  
 
+
+
+
+<!-- Der Dialog -->
+<div id="text-dialog" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Nachricht an den technischen Ansprechpartner</h5>
+     
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+          
+            <textarea type="text-area" placeholder="Schreiben Sie hier eine Nachricht an die technischen Ansprechpartner!" style="height: 20rem; width: 29rem;" class="form-control" id="text-input"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button type="button" class="btn btn-secondary" id="close-dialog-btn">Abort</button>
+        <button type="button" class="btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Der Dialog
+<dialog id="text-dialog">
+  <form>
+    <label for="text-input">Text eingeben:</label><br>
+    <input type="text" id="text-input"><br><br>
+    <button type="submit">Absenden</button>
+    <button type="button" id="close-dialog-btn">Schließen</button>
+  </form>
+</dialog> -->
+
   <!-- Erstellung der Ampel-HTML-Elemente -->
-      <div class="container-fluid">
+    <div class="container-fluid">
         <div class="traffic-light horizontal">
         <div class="light red" id="redlight"></div>
         <div class="light yellow"id="yellowlight"></div>
         <div class="light green"id="greenlight"></div>
         <div class="light white"id="whitelight"></div> 
         <div class="container-fluid text-end">
-        <button type="button"  style="margin-top:1em; pointer-events:none; 
-        background-color: #d24525; color: white;" class="btn btn btn-img" id="alert"><img src="danger.jpg" ></button>
-        <button type="button" style="margin-top:1em; pointer-events:none; 
+
+        <div class="dropdown">
+          <button class="dropbtn">Set Interval</button>
+          <div class="dropdown-content">
+            <a href="#" id="5s" onclick="selectInterval(this.id)">5 sek</a>
+            <a href="#" id="10s" onclick="selectInterval(this.id)">10 sek</a>
+            <a href="#" id="30s" onclick="selectInterval(this.id)">30 sek</a>
+            <a href="#" id="1m" onclick="selectInterval(this.id)">1 min</a>
+            <a href="#" id="3m" onclick="selectInterval(this.id)">3 min</a>
+            <a href="#" id="5m" onclick="selectInterval(this.id)">5 min</a>
+            <a href="#" id="debug" onclick="selectInterval(this.id)">Debug</a>
+          </div>
+        </div> 
+        <!-- <button type="button"  style="margin-top:1em; pointer-events:none; 
+        background-color: #d24525; color: white;" class="btn btn btn-img badge position-relative" id="alert"><img src="danger.jpg" >
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-danger">
+            99+
+            <span class="visually-hidden">unread messages</span>
+          </span>
+        </button> -->
+        <span class="position-relative">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span id="warningBadge" class="position-absolute top-0 start-100 translate-middle badge bg-warning rounded-pill text-dark" style="z-index: 1;"></span>
+        </span> 
+        <button type="button"  style=" 
+        background-color: #d24525; color: white;" class="btn btn btn-img badge position-relative" id="alert" onclick="showWarnings()"><img src="danger.jpg" >
+        </button>       
+        <button type="button" style=" pointer-events:none; 
         background-color: #217446; color: white;" class="btn btn" id="timer-btn">Timer</button>
-        <button type="button" style="margin-top:1em; pointer-events:none; 
+        <button type="button" style=" pointer-events:none; 
         background-color: #d24525; color: white;" class="btn btn">Eskalation</button>
         </div>
       </div>
-      </div>
+      
       <!-- <div class="parent-container">
       <div id="container1" ondrop="drop(event)" ondragover="allowDrop(event)">
         <div id="draggable" draggable="true" ondragstart="drag(event)"></div>
@@ -71,6 +180,10 @@
             <div class = "charts" id="chart1"></div>    
         <div class ="charts" id="chart2"></div>
     <div class = "charts" id="chart3" ></div>
+
+    
+
+
   
 
 
@@ -79,11 +192,17 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.40.0/apexcharts.min.js" 
       integrity="sha512-Kr1p/vGF2i84dZQTkoYZ2do8xHRaiqIa7ysnDugwoOcG0SbIx98erNekP/qms/hBDiBxj336//77d0dv53Jmew==" 
       crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+      crossorigin="anonymous"></script>
 <!-- Importierung des verwendeten javascript-codes  -->
   <script src="database.js"></script>
   <!-- <script src= "draganddrop.js"></script> -->
   <script src="scripts.js"></script>
   <script src="3djs.js"></script>
+  <!-- Bootstrap JavaScript -->
+
+
 </body>
 
 </html>
