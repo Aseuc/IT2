@@ -425,16 +425,16 @@ async function visualizeData1() {
   let rawData2 = await getData("vibration");
   let Xdata = await rawData[0];
   let Ydata = await rawData[1];
-  let Ydata2 = await rawData2[1];
-
+/*   let Ydata2 = await rawData2[1];
+ */
   
   
   Ydata = Ydata.map(function (value) {
     return value.replace(",", ".");
   });
-  Ydata2 = Ydata2.map(function (value) {
+/*   Ydata2 = Ydata2.map(function (value) {
     return value.replace(",", ".");
-  });
+  }); */
 
 
 
@@ -442,8 +442,8 @@ async function visualizeData1() {
   let timeArray2 = getMinutesEveryFive(timeArray);
   let currentDataX = timeArray2.slice(0, 10);
   let currentDataY = Ydata.slice(0,10);
-  let currentDataY2 = Ydata2.slice(0,10);
-
+/*   let currentDataY2 = Ydata2.slice(0,10);
+ */
   
 
   /*   console.log("X: ", timeArray2); */
@@ -454,6 +454,8 @@ async function visualizeData1() {
     let i = 0;
     let timeStart = 0;
     while (1) {
+
+ 
       if (updateInterval === 0) {
         break;
       }
@@ -463,11 +465,11 @@ async function visualizeData1() {
         visualizeData1();
       }
 
-      await sleep(updateInterval * 1000);
+      await sleep(updateInterval*1000);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
-      currentDataY2 = Ydata2.slice(0, timeEnd)
-      checkIncomingData(currentDataY[i],currentDataY2[i])
+/*       currentDataY2 = Ydata2.slice(0, timeEnd)
+      checkIncomingData(currentDataY[i],currentDataY2[i]) */
 
 
 
@@ -479,6 +481,11 @@ async function visualizeData1() {
         renderData1[0].toleranzWert,
         renderData1[0].schadenWert
       );
+
+
+
+       
+      
       if (i === 1) {
         //Grundeisntellung Licht von weiß auf Grün (einmalig)
         /*    console.log("Go green"); */
@@ -497,6 +504,9 @@ async function visualizeData1() {
     renderData1[0].toleranzWert,
     renderData1[0].schadenWert
   );
+  if (machineStopped == true){
+    return;
+  }
 }
 async function visualizeData2() {
   renderData2 = [
@@ -537,7 +547,8 @@ async function visualizeData2() {
 
     let timeStart = 0;
     while (1) {
-      /*       if (machineStopped == true) {return } */
+
+     
       if (updateInterval === 0) {
         break;
       }
@@ -568,6 +579,17 @@ async function visualizeData2() {
     renderData2[0].toleranzWert,
     renderData2[0].schadenWert
   );
+  if (machineStopped == true) {
+    return;}
+
+
+
+
+
+
+
+
+
 }
 async function visualizeData3() {
   renderData3 = [
@@ -607,7 +629,7 @@ async function visualizeData3() {
     let i = 0;
     let timeStart = 0; //Weil in erster Interation updateInterval * 2 nötig
     while (1) {
-      /*       if (machineStopped == true) {return } */
+
       if (updateInterval === 0) {
         break;
       }
@@ -988,6 +1010,30 @@ const dialog = document.querySelector("#text-dialog");
 const openDialogBtn = document.querySelector("#open-dialog-btn");
 const closeDialogBtn = document.querySelector("#close-dialog-btn");
 const dialog2 = document.querySelector("#yellowLine");
+
+
+function main(){
 visualizeData1();
 visualizeData2();
 visualizeData3();
+
+
+if (machineStopped == true){
+  console.log("Machine stopped");
+  return;
+}
+}
+
+
+
+
+
+
+
+
+main()
+
+
+
+
+
