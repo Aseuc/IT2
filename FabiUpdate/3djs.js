@@ -41,6 +41,36 @@ function closeDialogAfterDelay(dialogId) {
   }, 1000);
 }
 
+let tempArray = [];
+
+function checkIncomingData(value1, value2) {
+  function checkDifference(array) {
+    for (let i = 0; i < array.length - 1; i++) {
+      if (Math.abs(array[i] - array[i+1]) > 6) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  tempArray.push(value1);
+  if (tempArray.length === 5) {
+    let result = checkDifference(tempArray);
+    if (result) {
+      console.log('Fall 4: Indiz für loses Teil (Abweichung letzte 5 Sec. >): Temp: 6');
+    } else {
+      console.log('Keine Differenz von mehr als 6 wurde gefunden');
+    }
+    tempArray.shift();
+  }
+
+  if (Math.abs(value2 - tempArray[1]) > 0.02) {
+    console.log('Fall 4: Indiz für loses Teil (Abweichung letzte 5 Sec. >): Vibr: 0.02');
+  } else {
+    console.log('Die Differenz zwischen dem zweiten und dem dritten Wert überschreitet nicht 0.02');
+  }
+}
+
 function getCurrentTime() {
   const date = new Date();
   const hours = date.getHours().toString().padStart(2, "0");
@@ -275,7 +305,7 @@ function continueMachine() {
 async function getData(version) {
   let response = [];
 
-  let randmonDataSet = Math.floor(Math.random() * 4);
+  let randmonDataSet = 2 /* Math.floor(Math.random() * 4); */
   switch (randmonDataSet) {
     case 0:
       if (FETCHED_DATA[0].length === 0) {
@@ -392,17 +422,30 @@ async function visualizeData1() {
   ];
 
   let rawData = await getData("temperatur");
-
+  let rawData2 = await getData("vibration");
   let Xdata = await rawData[0];
   let Ydata = await rawData[1];
+  let Ydata2 = await rawData2[1];
+
+  
+  
+  Ydata = Ydata.map(function (value) {
+    return value.replace(",", ".");
+  });
+  Ydata2 = Ydata2.map(function (value) {
+    return value.replace(",", ".");
+  });
+
+
 
   let timeArray = Xdata.map((str) => str.replace(/\d{2}\.\d{2}\.\d{4}/, ""));
   let timeArray2 = getMinutesEveryFive(timeArray);
   let currentDataX = timeArray2.slice(0, 10);
-  Ydata = Ydata.map(function (value) {
-    return value.replace(",", ".");
-  });
-  let currentDataY = Ydata.slice(0, 10);
+  let currentDataY = Ydata.slice(0,10);
+  let currentDataY2 = Ydata2.slice(0,10);
+
+  
+
   /*   console.log("X: ", timeArray2); */
 
   if (updateInterval !== 0) {
@@ -423,6 +466,10 @@ async function visualizeData1() {
       await sleep(updateInterval * 1000);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
+      currentDataY2 = Ydata2.slice(0, timeEnd)
+      checkIncomingData(currentDataY[i],currentDataY2[i])
+
+
 
       RenderChart(renderData1, currentDataY, currentDataX);
       /*  console.log(currentDataX, "\n", currentDataY); */
@@ -854,7 +901,7 @@ function showWarnings() {
         cardHeader +
         cardBody +
         '<h5 class="card-title" style="color: #e0eb44;">' +
-        "Check oil" +
+        "Check oil!" +
         "</h5>" +
         '<p class="card-text" style="line-height: 2;">' +
         text01 +
@@ -930,6 +977,12 @@ function showWarnings() {
   targetModal.showModal();
   targetModal.innerHTML = inner;
 }
+
+
+
+
+
+
 
 const dialog = document.querySelector("#text-dialog");
 const openDialogBtn = document.querySelector("#open-dialog-btn");
