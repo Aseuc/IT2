@@ -14,13 +14,14 @@ let weakBalljoints = false;
 let leck = false;
 let weakOil = false;
 let lose = false;
-
+let machineStopped = false; 
 const redLight = document.getElementById("redlight");
 const yellowLight = document.getElementById("yellowlight");
 const greenLight = document.getElementById("greenlight");
 const whiteLight = document.getElementById("whitelight");
 let activeLight = greenLight;
-
+let btnContinue = document.getElementById("btnContinue");
+let btnStopMachine = document.getElementById("btnStopMachine");
 whiteLight.style.opacity = 1;
 
 
@@ -37,7 +38,7 @@ function getCurrentTime() {
 
 
 function drop() {
-  console.log("Dropped");
+/*   console.log("Dropped"); */
   $(".dropdown-toggle").dropdown();
 }
 
@@ -48,7 +49,7 @@ function timer() {
   }
   const timerButton = document.querySelector("#timer-btn");
   timeLeft = updateInterval;
-  console.log(timeLeft);
+  /* console.log(timeLeft); */
   timerRunning = setInterval(() => {
     timeLeft--;
     timerButton.textContent = timeLeft;
@@ -64,8 +65,39 @@ function timer() {
   }, 1000);
 }
 
+
+
+
+
+
+/* async function countdownTimer() {
+  let timeLeft = 10;
+
+  let timer = setInterval(function() {
+    if(timeLeft <= 0) {
+      clearInterval(timer);
+      document.getElementById('timer').innerHTML = 'Zeit abgelaufen!';
+    } else {
+      document.getElementById('timer').innerHTML = timeLeft + ' Sekunden verbleibend';
+    }
+    timeLeft -= 1;
+  }, 1000);
+} */
+
+
+
+function reloadPage() {
+  location.reload();
+}
+
+
+
+
+
+
+
 function selectInterval(item_id) {
-  console.log(item_id);
+/*   console.log(item_id); */
   switch (item_id) {
     case "5s":
       updateInterval = 5;
@@ -104,11 +136,19 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function checkForProblems(dataset, data, thresholdA, thresholdB) {
+
+function sleepCheckMachine(ms) {
+  
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+
+
+async function checkForProblems(dataset, data, thresholdA, thresholdB) {
   //let min = Math.min.apply(Math, data);
   let max = Math.max.apply(Math, data);
   let badgeIcon = document.getElementById("warningBadge");
-  console.log("Daten:", data);
+
 
 
 
@@ -124,7 +164,7 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
         }
       }
       if (!leck && maxSpike1 > 2.5) {
-        console.log("Leck");
+  /*       console.log("Leck"); */
         warnings = warnings + 1;
         badgeIcon.innerText = warnings;
         leck = true;
@@ -141,7 +181,7 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
         }
       }
       if (!bruch && maxSpike2 > 5) {
-        console.log("Bruch: ", maxSpike2);
+/*         console.log("Bruch: ", maxSpike2); */
         warnings = warnings + 1;
         badgeIcon.innerText = warnings;
         bruch = true;
@@ -162,7 +202,7 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
         }
       }
       if (!lose && maxSpike3 >= 0.3) {
-        console.log("Lose Teile: ", maxSpike3);
+/*         console.log("Lose Teile: ", maxSpike3); */
         warnings = warnings + 1;
         badgeIcon.innerText = warnings;
         lose = true;
@@ -171,29 +211,66 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
         break;
       }
     default:
-      console.log("Not recognized");
+/*       console.log("Not recognized"); */
   }
 
   if (max > thresholdB) {
-    console.log("Red line excedded: ", dataset);
+/*     countdownTimer() */
+    machineStopped = true;
+/*     console.log("Red line excedded: ", dataset); */
     let dialog = document.getElementById("redLine");
+    let tasksRed = document.getElementById("tasksRed1");
+    let tasksRed2 = document.getElementById("tasksRed2");
+    let tasksRed3= document.getElementById("tasksRed3");
+    let tasksRed4 = document.getElementById("tasksRed4");
     if (dialog !== null && dialog.open.id != dataset) {
+
       dialog.showModal();
+      
       dialog.id = dataset;
     } else {
-      console.log("Dialog is already displaying");
+     /*  console.log("Dialog is already displaying"); */
     }
 
+
+
     let nameField = document.getElementById("placerholderRed");
+    
     if (activeLight !== redLight) {
       activeLight.style.opacity = 0.3;
       activeLight = redLight;
       redLight.style.opacity = 1;
     }
 
+
+    console.log(dataset)
+    if (dataset === "Schmiermittelverbrauch – Temperatur")
+    {tasksRed.innerHTML = "Step 1: Check for leaks!"
+      tasksRed2.innerHTML = "Step 2: Clean motor!"
+      tasksRed3.innerHTML = "Step 3: Change Oil!"  
+  } else if (dataset === "Anlageninnenleben – Vibration und Akustik"){
+
+    tasksRed.innerHTML = "Step 1: Check for foreign objects!"
+    tasksRed2.innerHTML = "Step 2: Check for wear!"
+    tasksRed3.innerHTML = "Step 3: Perform maintenance!"
+
+  } else if (dataset === "Kugellagerlauf – Vibration und Akustik"){
+
+    tasksRed.innerHTML = "Step 1: Check the bearing for wear!"
+    tasksRed2.innerHTML = "Step 2: Check the bearing for contamination!"
+    tasksRed3.innerHTML = "Step 3: Add lubricant!"
+    tasksRed4.innerHTML = "Step 4: Replace the bearing!"
+
+  }
+
+
+
+
+
+
     nameField.innerHTML = '"' + dataset + '"';
   } else if (max > thresholdA) {
-    console.log("Yellow line excedded: ", dataset);
+/*     console.log("Yellow line excedded: ", dataset); */
     if (dataset === "Schmiermittelverbrauch – Temperatur" && !weakOil) {
       warnings = warnings + 1;
       badgeIcon.innerText = warnings;
@@ -204,7 +281,7 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
       dialog.showModal();
       dialog.id = dataset;
     } else {
-      console.log("Dialog is already displaying");
+/*       console.log("Dialog is already displaying"); */
     }
 
     let nameField = document.getElementById("placerholderYellow");
@@ -216,34 +293,43 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
       yellowLight.style.opacity = 1;
     }
   }
-
-
-
-
-
-
-
-
-
-
-
 }
+
+
+
+function stopMachine(){
+machineStopped = true;
+return machineStopped; 
+}
+
+function continueMachine() { machineStopped = false; return machineStopped; }
+
+
+
+
+
+
+
+
+
+
 
 async function getData(version) {
   let response = [];
 
-  let randmonDataSet = Math.floor(Math.random() * 4);
+  let randmonDataSet =  Math.floor(Math.random() * 4); 
   switch (randmonDataSet) {
     case 0:
       if (FETCHED_DATA[0].length === 0) {
-        console.log(FETCHED_DATA[0]);
+/*         console.log(FETCHED_DATA[0]); */
         response = await (
           await fetch("https://it2wi1.if-lab.de/rest/mpr_fall1")
         ).json();
+/*         console.log("Fall1") */
         FETCHED_DATA[0] = response;
       } else {
         response = FETCHED_DATA[0];
-        console.log("Buffer 0: ", FETCHED_DATA);
+/*         console.log("Buffer 0: ", FETCHED_DATA); */
       }
       break;
 
@@ -254,44 +340,49 @@ async function getData(version) {
           await fetch("https://it2wi1.if-lab.de/rest/mpr_fall2")
         ).json();
         FETCHED_DATA[1] = response;
+/*         console.log("Fall2") */
       } else {
         response = FETCHED_DATA[1];
-        console.log("Buffer 1: ", FETCHED_DATA);
+/*         console.log("Buffer 1: ", FETCHED_DATA); */
       }
       break;
 
     case 2:
       if (FETCHED_DATA[2].length === 0) {
-        console.log(FETCHED_DATA[2]);
+/*         console.log(FETCHED_DATA[2]); */
         response = await (
           await fetch("https://it2wi1.if-lab.de/rest/mpr_fall3")
+        
         ).json();
+/*         console.log("Fall3") */
         FETCHED_DATA[2] = response;
       } else {
         response = FETCHED_DATA[2];
-        console.log("Buffer 2: ", FETCHED_DATA);
+/*         console.log("Buffer 2: ", FETCHED_DATA); */
       }
       break;
 
     case 3:
       if (FETCHED_DATA[3].length === 0) {
-        console.log(FETCHED_DATA[3]);
+/*         console.log(FETCHED_DATA[3]); */
         response = await (
           await fetch("https://it2wi1.if-lab.de/rest/mpr_fall4")
         ).json();
+/*         console.log("Fall4") */
         FETCHED_DATA[3] = response;
       } else {
         response = FETCHED_DATA[3];
-        console.log("Buffer 3: ", FETCHED_DATA);
+/*         console.log("Buffer 3: ", FETCHED_DATA); */
       }
       break;
 
     default:
-      console.log("Fatal error getting data");
+/*       console.log("Fatal error getting data"); */
   }
 
-  console.log("FETCH: ", FETCHED_DATA[0].length);
+/*   console.log("FETCH: ", FETCHED_DATA[0].length); */
 
+        
   return getDataPoints(response, version);
 }
 
@@ -321,7 +412,7 @@ async function getDataPoints(dataSet, version) {
       }
       break;
     default:
-      console.log("Unknown Parsing type");
+/*       console.log("Unknown Parsing type"); */
   }
   return [XData, YData];
 }
@@ -358,7 +449,7 @@ async function visualizeData1() {
     return value.replace(",", ".");
   });
   let currentDataY = Ydata.slice(0, 10);
-  console.log("X: ", timeArray2);
+/*   console.log("X: ", timeArray2); */
 
   if (updateInterval !== 0) {
     RenderChart(renderData1, [], []);
@@ -366,6 +457,7 @@ async function visualizeData1() {
     let i = 0;
     let timeStart = 0;
     while (1) {
+
       if (updateInterval === 0) {
         break;
       }
@@ -377,14 +469,6 @@ async function visualizeData1() {
 
       }
       
-    /*   if (timeEnd >= Ydata.length) {
-
-        break;
-      } */
-      /* console.log(getCurrentTime()) */
-
-
-
 
       await sleep(updateInterval * 1000);
       currentDataX[i] = getCurrentTime();
@@ -420,13 +504,6 @@ async function visualizeData1() {
     renderData1[0].toleranzWert,
     renderData1[0].schadenWert
   );
-
-
-
-
-
-
-
 }
 
 async function visualizeData2() {
@@ -468,14 +545,13 @@ async function visualizeData2() {
   
     let timeStart = 0;
     while (1) {
+/*       if (machineStopped == true) {return } */
       if (updateInterval === 0) {
         break;
       }
+    
       let timeEnd = timeStart + updateInterval;
-     /*  if (timeEnd >= Ydata.length) {
-        break;
-      } */
-
+    
       if(i == timeArray2.length){
         visualizeData2()
 
@@ -542,6 +618,7 @@ async function visualizeData3() {
     let i = 0
     let timeStart = 0; //Weil in erster Interation updateInterval * 2 nötig
     while (1) {
+/*       if (machineStopped == true) {return } */
       if (updateInterval === 0) {
         break;
       }
@@ -556,10 +633,7 @@ async function visualizeData3() {
 
     }
 
-
-
-
-      await sleep(updateInterval * 1000);
+    await sleep(updateInterval * 1000);
       currentDataX[i] = getCurrentTime()
       currentDataY = Ydata.slice(0, timeEnd);
 
@@ -585,7 +659,10 @@ async function visualizeData3() {
 }
 
 function RenderChart(renderData, YData, timeArray2) {
-  if (renderData[0].chartID === 1) {
+
+
+  if(machineStopped == false){
+    if (renderData[0].chartID === 1) {
     if (chart1 !== undefined) {
       chart1.updateSeries([
         {
@@ -641,7 +718,7 @@ function RenderChart(renderData, YData, timeArray2) {
     }
   }
 
-  console.log("Render: ", renderData[0].title);
+/*   console.log("Render: ", renderData[0].title); */
   const options = {
     toolbar: {
       tools: {
@@ -770,17 +847,20 @@ function RenderChart(renderData, YData, timeArray2) {
 
   if (renderData[0].chartID === 1) {
     chart1 = new ApexCharts(document.querySelector("#chart1"), options);
-    console.log("Render 1");
+ /*    console.log("Render 1"); */
     chart1.render();
   } else if (renderData[0].chartID === 2) {
     chart2 = new ApexCharts(document.querySelector("#chart2"), options);
-    console.log("Render 2");
+/*     console.log("Render 2"); */
     chart2.render();
   } else {
     chart3 = new ApexCharts(document.querySelector("#chart3"), options);
-    console.log("Render 3");
+/*     console.log("Render 3"); */
     chart3.render();
   }
+}else{
+renderData =[]
+}
 }
 
 function getSecondsEveryFive(array) {
@@ -789,7 +869,7 @@ function getSecondsEveryFive(array) {
     const seconds = parseInt(time.split(":")[2], 10);
 
     if (seconds % 5 === 0) {
-      console.log(result);
+/*       console.log(result); */
       result.push(time);
     }
   });
@@ -817,7 +897,7 @@ function showWarnings() {
   let cardEnd = "</div></div>";
 
   if (warnings === 0) {
-    console.log("Warning pressed");
+/*     console.log("Warning pressed"); */
     let text =
       "There are no signs of failures within the machine. <br> Keep monitoring the setup closely.";
     inner =

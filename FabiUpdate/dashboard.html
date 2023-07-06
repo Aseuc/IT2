@@ -49,15 +49,21 @@
       <button class="btn btn-warning" style="float: right; margin-right: 1rem;" id="open-dialog-btn" formmethod="dialog">Notify Technican</button>
     </form>
   </dialog>
-  <dialog class="dialogModal" id="redLine">
+  <dialog class="dialogModal" id="redLine" style="text-align: center;">
     <div id="containerBlockRedText" style="display: inline;">
       <p>Warning! Your </p>
       <p id="placerholderRed"></p>
       <p> is exceeding it's designed specification!</p>
     </div>
-    <p id="tasksRed">TO-DO: Specify problem</p>
-    <form method="dialog">
-      <button class="btn btn-danger" style="float: right;" value="cancel" formmethod="dialog">Stop machine</button>
+    <p id="tasksRed1"></p>
+    <p id="tasksRed2"></p>
+    <p id="tasksRed3"></p>
+    <p id="tasksRed4"></p>
+    <p id="tasksRed5"></p>
+    <p>If all problems are solved click "Restart Machine"!</p>
+    <form method="dialog" style="text-align: center;">
+      <button class="btn btn-danger" id="btnStopMachine" style="float: right; text-align: center;" value="cancel" formmethod="dialog" onclick="reloadPage()">Restart Machine</button>
+      
     </form>
   </dialog>
   <dialog class="dialogModal" id="warningModal">
