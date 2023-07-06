@@ -305,7 +305,12 @@ function continueMachine() {
 async function getData(version) {
   let response = [];
 
-  let randmonDataSet = 2 /* Math.floor(Math.random() * 4); */
+  let randmonDataSet = Math.floor(Math.random() * 4);
+
+
+
+
+
   switch (randmonDataSet) {
     case 0:
       if (FETCHED_DATA[0].length === 0) {
