@@ -1,5 +1,6 @@
 /* HTML Elemente sind mit IDs versehen (id="redlight"...), womit man durch javascript auf diese Elemente zugreifen kann */
 
+/*
 const redLight = document.getElementById("redlight");
 const yellowLight = document.getElementById('yellowlight');
 const greenLight = document.getElementById('greenlight');
@@ -9,8 +10,10 @@ let activeLight = redLight;
 
 /* Ändert die Transparenz der Ampellichter jede Sekunde ein anderes Licht  */
 
+/*
  setInterval(() => {
 
+  //switch wäre auch gut
   if (activeLight === redLight) {
     redLight.style.opacity = 1;
     whiteLight.style.opacity = 0.3;
@@ -30,19 +33,6 @@ let activeLight = redLight;
 
     }
   
-}, 1000);
+}, 1000);*/
 
 /* Für den Timer wird hier die Zeit angezeigt wie lange beispielsweise die Anwendung etc. noch läuft. erstmal nur Beispielcode*/
-function timer(){
-let timeLeft = 60;
-const timerButton = document.querySelector('#timer-btn');
-
-  const timer = setInterval(() => {
-    timeLeft--;
-    timerButton.textContent = timeLeft;
-
-    if (timeLeft === 0) {
-      /* clearInterval(timer); */
-      timeLeft = 10;
-    }
-  }, 1000);}
