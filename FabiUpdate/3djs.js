@@ -8,7 +8,7 @@ let timeLeft;
 let timerRunning = null;
 let timerWait = false;
 let warnings = 0;
-
+let intervall = 0; 
 let bruch = false;
 let weakBalljoints = false;
 let leck = false;
@@ -252,7 +252,7 @@ async function checkForProblems(dataset, data, thresholdA, thresholdB) {
       redLight.style.opacity = 1;
     }
 
-    console.log(dataset);
+/*     console.log(dataset); */
     if (dataset === "Schmiermittelverbrauch – Temperatur") {
       tasksRed.innerHTML = "Step 1: Check for leaks!";
       tasksRed2.innerHTML = "Step 2: Clean motor!";
@@ -465,7 +465,7 @@ async function visualizeData1() {
         visualizeData1();
       }
 
-      await sleep(updateInterval*1000);
+      await sleep(updateInterval * intervall);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
 /*       currentDataY2 = Ydata2.slice(0, timeEnd)
@@ -493,20 +493,17 @@ async function visualizeData1() {
         activeLight = greenLight;
         greenLight.style.opacity = 1;
       }
+
+/*       if (machineStopped == true){
+        console.log("Machine Stopped VS1")
+        return;
+      } */
+
       timeStart = timeEnd;
       i++;
     }
   }
-  RenderChart(renderData1, Ydata, timeArray2);
-  checkForProblems(
-    renderData1[0].title,
-    Ydata,
-    renderData1[0].toleranzWert,
-    renderData1[0].schadenWert
-  );
-  if (machineStopped == true){
-    return;
-  }
+
 }
 async function visualizeData2() {
   renderData2 = [
@@ -558,7 +555,7 @@ async function visualizeData2() {
       if (i == timeArray2.length) {
         visualizeData2();
       }
-      await sleep(updateInterval * 1000);
+      await sleep(updateInterval * intervall);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
       RenderChart(renderData2, currentDataY, currentDataX);
@@ -568,6 +565,12 @@ async function visualizeData2() {
         renderData2[0].toleranzWert,
         renderData2[0].schadenWert
       );
+/*         if(machineStopped == true){
+          console.log("Machine stopped VS2")
+          
+          return; 
+        }
+ */
       timeStart = timeEnd;
       i++;
     }
@@ -642,7 +645,7 @@ async function visualizeData3() {
         visualizeData3();
       }
 
-      await sleep(updateInterval * 1000);
+      await sleep(updateInterval * intervall);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
 
@@ -654,6 +657,10 @@ async function visualizeData3() {
         renderData3[0].toleranzWert,
         renderData3[0].schadenWert
       );
+/*       if(machineStopped==true){
+        console.log("Machine Stopped VS3")
+        return; 
+      } */
       timeStart = timeEnd;
       i++;
     }
