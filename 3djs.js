@@ -15,14 +15,187 @@ let leck = false;
 let weakOil = false;
 let lose = false;
 let machineStopped = false;
+
+let losesTeil1Indiz = false; 
+let losesTeil2Indiz =false;
+
+let activeLightYellow = false; 
+let activeLightRed = false;
+
+
 const redLight = document.getElementById("redlight");
 const yellowLight = document.getElementById("yellowlight");
 const greenLight = document.getElementById("greenlight");
 const whiteLight = document.getElementById("whitelight");
+
 let activeLight = greenLight;
+
 let btnContinue = document.getElementById("btnContinue");
 let btnStopMachine = document.getElementById("btnStopMachine");
+
 whiteLight.style.opacity = 1;
+
+async function getData(version) {
+  let response = [];
+/* 
+  let randmonDataSet = Math.floor(Math.random() * 4); */
+  let randmonDataSet = 2;
+
+
+
+  switch (randmonDataSet) {
+    case 0:
+      if (FETCHED_DATA[0].length === 0) {
+        /*         console.log(FETCHED_DATA[0]); */
+        response = await (
+          await fetch("https://it2wi1.if-lab.de/rest/mpr_fall1")
+        ).json();
+        /*         console.log("Fall1") */
+        FETCHED_DATA[0] = response;
+      } else {
+        response = FETCHED_DATA[0];
+        /*         console.log("Buffer 0: ", FETCHED_DATA); */
+      }
+      break;
+
+    case 1:
+      if (FETCHED_DATA[1].length === 0) {
+        console.log(FETCHED_DATA[1]);
+        response = await (
+          await fetch("https://it2wi1.if-lab.de/rest/mpr_fall2")
+        ).json();
+        FETCHED_DATA[1] = response;
+        /*         console.log("Fall2") */
+      } else {
+        response = FETCHED_DATA[1];
+        /*         console.log("Buffer 1: ", FETCHED_DATA); */
+      }
+      break;
+
+    case 2:
+      if (FETCHED_DATA[2].length === 0) {
+        /*         console.log(FETCHED_DATA[2]); */
+        response = await (
+          await fetch("https://it2wi1.if-lab.de/rest/mpr_fall3")
+        ).json();
+        /*         console.log("Fall3") */
+        FETCHED_DATA[2] = response;
+      } else {
+        response = FETCHED_DATA[2];
+        /*         console.log("Buffer 2: ", FETCHED_DATA); */
+      }
+      break;
+
+    case 3:
+      if (FETCHED_DATA[3].length === 0) {
+        /*         console.log(FETCHED_DATA[3]); */
+        response = await (
+          await fetch("https://it2wi1.if-lab.de/rest/mpr_fall4")
+        ).json();
+        /*         console.log("Fall4") */
+        FETCHED_DATA[3] = response;
+      } else {
+        response = FETCHED_DATA[3];
+        /*         console.log("Buffer 3: ", FETCHED_DATA); */
+      }
+      break;
+
+    default:
+    /*       console.log("Fatal error getting data"); */
+  }
+
+  /*   console.log("FETCH: ", FETCHED_DATA[0].length); */
+
+  return getDataPoints(response, version);
+}
+async function getDataPoints(dataSet, version) {
+  XData = [];
+  YData = [];
+  YData2 = [];
+console.log(dataSet)
+
+  switch (version) {
+    case "temperatur":
+      for (let i = 0; i < dataSet.length; i++) {
+        YData.push(dataSet[i].werte.Tavg_temp);
+        XData.push(dataSet[i].datum);
+  
+
+      }
+      break;
+
+    case "vibration":
+      for (let i = 0; i < dataSet.length; i++) {
+        YData.push(dataSet[i].werte.Tavg_vibr);
+        XData.push(dataSet[i].datum);
+        YData2.push(dataSet[i].werte.Tavg_temp);
+
+      }
+      break;
+
+    case "laut":
+      for (let i = 0; i < dataSet.length; i++) {
+        YData.push(dataSet[i].werte.Tavg_laut);
+        XData.push(dataSet[i].datum);
+      }
+      break;
+    default:
+    /*       console.log("Unknown Parsing type"); */
+  }
+  return [XData, YData,YData2];
+}
+
+
+
+
+
+
+let values = [];
+
+function checkDifference() {
+    if (values.length >= 5) {
+        if (Math.abs(values[0] - values[4]) > 6) {
+          /*   throw new Error("Die Differenz zwischen dem ersten und dem fünften Wert ist größer oder gleich 6"); */
+          console.log("Differenz größer 6")
+        losesTeil1Indiz = true;
+        }
+    }
+}
+
+function receiveData(value) {
+    values.push(value);
+    if (values.length > 5) {
+        values.shift();
+    }
+    checkDifference();
+}
+
+
+let values2 = [];
+
+function checkDifference2() {
+    if (values2.length >= 5) {
+        if (Math.abs(values2[0] - values2[4]) > 0.02) {
+            losesTeil2Indiz = true; 
+            console.log("Diff > 0.02")
+        }
+    }
+}
+
+function receiveData2(value2) {
+    values2.push(value2);
+    if (values2.length > 5) {
+        values2.shift();
+    }
+    checkDifference2();
+}
+
+
+
+
+
+
+
 
 function closeDialogAfterDelay(dialogId) {
   let dialog = document.getElementById(dialogId);
@@ -42,35 +215,58 @@ function closeDialogAfterDelay(dialogId) {
 }
 
 let tempArray = [];
-
-function checkIncomingData(value1, value2) {
-  function checkDifference(array) {
-    for (let i = 0; i < array.length - 1; i++) {
-      if (Math.abs(array[i] - array[i+1]) > 6) {
-        return true;
-      }
+/* function checkDifference(array) {
+  for (let i = 0; i < array.length - 1; i++) {
+    if (Math.abs(array[i] - array[i+1]) > 6) {
+      return true;
     }
-    return false;
   }
+  return false;
+}
+ */
+/* function checkDifference2(array) {
+  for (let i = 0; i < array.length - 1; i++) {
+    if (Math.abs(array[i] - array[i+1]) > 0.2) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function checkDifference(array) {
+  for (let i = 0; i < array.length - 1; i++) {
+      if (Math.abs(array[i] - array[i + 1]) <= 6) {
+          return false;
+      }
+  }
+  return true;
+}
+ */
+
+
+
+/* function checkIncomingData(value1, value2) {
+
 
   tempArray.push(value1);
   if (tempArray.length === 5) {
     let result = checkDifference(tempArray);
     if (result) {
-      console.log('Fall 4: Indiz für loses Teil (Abweichung letzte 5 Sec. >): Temp: 6');
+      console.log('1. Indiz für loses Teil (Abweichung letzte 5 Sec. >): Temp: 6');
     } else {
       console.log('Keine Differenz von mehr als 6 wurde gefunden');
     }
     tempArray.shift();
   }
 
+
   if (Math.abs(value2 - tempArray[1]) > 0.02) {
-    console.log('Fall 4: Indiz für loses Teil (Abweichung letzte 5 Sec. >): Vibr: 0.02');
+    console.log('2. Indiz für loses Teil (Abweichung letzte 5 Sec. >): Vibr: 0.02');
   } else {
     console.log('Die Differenz zwischen dem zweiten und dem dritten Wert überschreitet nicht 0.02');
   }
 }
-
+ */
 function getCurrentTime() {
   const date = new Date();
   const hours = date.getHours().toString().padStart(2, "0");
@@ -236,10 +432,10 @@ async function checkForProblems(dataset, data, thresholdA, thresholdB) {
     let tasksRed2 = document.getElementById("tasksRed2");
     let tasksRed3 = document.getElementById("tasksRed3");
     let tasksRed4 = document.getElementById("tasksRed4");
-    if (dialog !== null && dialog.open.id != dataset) {
+    
+    if (dialog !== null /* &&  *//* dialog.open.id != dataset */) {
       dialog.showModal();
-
-      dialog.id = dataset;
+   /*    dialog.id = dataset; */
     } else {
       /*  console.log("Dialog is already displaying"); */
     }
@@ -254,9 +450,16 @@ async function checkForProblems(dataset, data, thresholdA, thresholdB) {
 
 /*     console.log(dataset); */
     if (dataset === "Schmiermittelverbrauch – Temperatur") {
+
       tasksRed.innerHTML = "Step 1: Check for leaks!";
       tasksRed2.innerHTML = "Step 2: Clean motor!";
       tasksRed3.innerHTML = "Step 3: Change Oil!";
+
+      
+
+
+
+
     } else if (dataset === "Anlageninnenleben – Vibration und Akustik") {
       tasksRed.innerHTML = "Step 1: Check for foreign objects!";
       tasksRed2.innerHTML = "Step 2: Check for wear!";
@@ -280,13 +483,11 @@ async function checkForProblems(dataset, data, thresholdA, thresholdB) {
     if (dialog !== null && dialog.open.id != dataset) {
       closeDialogAfterDelay("yellowLine");
       dialog.id = dataset;
-    } else {
-      /*       console.log("Dialog is already displaying"); */
-    }
+    } 
 
     let nameField = document.getElementById("placerholderYellow");
     nameField.innerHTML = '"' + dataset + '"';
-    if (activeLight !== yellowLight && redLight.opacity !== 1) {
+    if (activeLight !== yellowLight && redLight.style.opacity !== 1) {
       //yellowLight.style.opacity = 0.3;
       activeLight.style.opacity = 0.3;
       activeLight = yellowLight;
@@ -302,110 +503,7 @@ function continueMachine() {
   machineStopped = false;
   return machineStopped;
 }
-async function getData(version) {
-  let response = [];
 
-  let randmonDataSet = Math.floor(Math.random() * 4);
-
-
-
-
-
-  switch (randmonDataSet) {
-    case 0:
-      if (FETCHED_DATA[0].length === 0) {
-        /*         console.log(FETCHED_DATA[0]); */
-        response = await (
-          await fetch("https://it2wi1.if-lab.de/rest/mpr_fall1")
-        ).json();
-        /*         console.log("Fall1") */
-        FETCHED_DATA[0] = response;
-      } else {
-        response = FETCHED_DATA[0];
-        /*         console.log("Buffer 0: ", FETCHED_DATA); */
-      }
-      break;
-
-    case 1:
-      if (FETCHED_DATA[1].length === 0) {
-        console.log(FETCHED_DATA[1]);
-        response = await (
-          await fetch("https://it2wi1.if-lab.de/rest/mpr_fall2")
-        ).json();
-        FETCHED_DATA[1] = response;
-        /*         console.log("Fall2") */
-      } else {
-        response = FETCHED_DATA[1];
-        /*         console.log("Buffer 1: ", FETCHED_DATA); */
-      }
-      break;
-
-    case 2:
-      if (FETCHED_DATA[2].length === 0) {
-        /*         console.log(FETCHED_DATA[2]); */
-        response = await (
-          await fetch("https://it2wi1.if-lab.de/rest/mpr_fall3")
-        ).json();
-        /*         console.log("Fall3") */
-        FETCHED_DATA[2] = response;
-      } else {
-        response = FETCHED_DATA[2];
-        /*         console.log("Buffer 2: ", FETCHED_DATA); */
-      }
-      break;
-
-    case 3:
-      if (FETCHED_DATA[3].length === 0) {
-        /*         console.log(FETCHED_DATA[3]); */
-        response = await (
-          await fetch("https://it2wi1.if-lab.de/rest/mpr_fall4")
-        ).json();
-        /*         console.log("Fall4") */
-        FETCHED_DATA[3] = response;
-      } else {
-        response = FETCHED_DATA[3];
-        /*         console.log("Buffer 3: ", FETCHED_DATA); */
-      }
-      break;
-
-    default:
-    /*       console.log("Fatal error getting data"); */
-  }
-
-  /*   console.log("FETCH: ", FETCHED_DATA[0].length); */
-
-  return getDataPoints(response, version);
-}
-async function getDataPoints(dataSet, version) {
-  XData = [];
-  YData = [];
-
-  switch (version) {
-    case "temperatur":
-      for (let i = 0; i < dataSet.length; i++) {
-        YData.push(dataSet[i].werte.Tavg_temp);
-        XData.push(dataSet[i].datum);
-      }
-      break;
-
-    case "vibration":
-      for (let i = 0; i < dataSet.length; i++) {
-        YData.push(dataSet[i].werte.Tavg_vibr);
-        XData.push(dataSet[i].datum);
-      }
-      break;
-
-    case "laut":
-      for (let i = 0; i < dataSet.length; i++) {
-        YData.push(dataSet[i].werte.Tavg_laut);
-        XData.push(dataSet[i].datum);
-      }
-      break;
-    default:
-    /*       console.log("Unknown Parsing type"); */
-  }
-  return [XData, YData];
-}
 async function visualizeData1() {
   renderData1 = [
     {
@@ -427,7 +525,6 @@ async function visualizeData1() {
   ];
 
   let rawData = await getData("temperatur");
-  let rawData2 = await getData("vibration");
   let Xdata = await rawData[0];
   let Ydata = await rawData[1];
 /*   let Ydata2 = await rawData2[1];
@@ -623,7 +720,8 @@ async function visualizeData3() {
 
   let Xdata = await rawData[0];
   let Ydata = await rawData[1];
-
+  let YData2 = await rawData[2];
+  console.log(Ydata, YData2);
   let timeArray = Xdata.map((str) => str.replace(/\d{2}\.\d{2}\.\d{4}/, ""));
   let timeArray2 = getMinutesEveryFive(timeArray);
   let currentDataX = timeArray2.slice(0, 10);
@@ -631,12 +729,20 @@ async function visualizeData3() {
     return value.replace(",", ".");
   });
   let currentDataY = Ydata.slice(0, 10);
+  YData2 = YData2.map(function (value) {
+     return value.replace(",", ".");
+  });
+
+
+
 
   if (updateInterval !== 0) {
     RenderChart(renderData3, [], []);
     let i = 0;
     let timeStart = 0; //Weil in erster Interation updateInterval * 2 nötig
     while (1) {
+
+
 
       if (updateInterval === 0) {
         break;
@@ -653,6 +759,20 @@ async function visualizeData3() {
       await sleep(updateInterval * intervall);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
+
+      receiveData(YData2[i]);
+      receiveData2(Ydata[i]);
+   
+      console.log("Anlageninnenleben_temp: " + YData2[i] +" Anlageninnenleben_vibration: " + Ydata[i])
+     
+
+
+
+
+
+
+
+
 
       RenderChart(renderData3, currentDataY, currentDataX);
 
