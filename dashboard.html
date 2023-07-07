@@ -46,7 +46,7 @@
     <p id="tasksYellow">TO-DO: Specify problem</p>
     <form method="dialog">
       <button class="btn btn-warning" style="float: right; margin-right: 1rem;" value="cancel" formmethod="dialog">OK</button>
-      <button class="btn btn-warning" style="float: right; margin-right: 1rem;" id="open-dialog-btn" formmethod="dialog">Notify Technican</button>
+      <button class="btn btn-warning" style="float: right; margin-right: 1rem;" id="open-dialog-btn" formmethod="dialog" onclick="openDialogNotifyTechnican()">Notify Technican</button>
     </form>
   </dialog>
   <dialog class="dialogModal" id="redLine" style="text-align: center;">
@@ -60,6 +60,12 @@
     <p id="tasksRed3"></p>
     <p id="tasksRed4"></p>
     <p id="tasksRed5"></p>
+    <p id="tasksRed6"></p>
+    <p id="tasksRed7"></p>
+    <p id="tasksRed8"></p>
+    <p id="tasksRed9"></p>
+    <p id="tasksRed10"></p>
+    <p id="tasksRed11"></p>
     <p>If all problems are solved click "Restart Machine"!</p>
     <form method="dialog" style="text-align: center;">
       <button class="btn btn-danger" id="btnStopMachine" style="float: right; margin-right: 5rem;" value="cancel" formmethod="dialog" onclick="reloadPage()">Restart Machine</button>
@@ -91,7 +97,7 @@
 
 
 <!-- Der Dialog -->
-<div id="text-dialog" class="modal" tabindex="-1">
+<!-- <div id="text-dialog" class="modal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -112,7 +118,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!-- Der Dialog
 <dialog id="text-dialog">
   <form>
@@ -153,7 +159,7 @@
         </button> -->
         <span class="position-relative">
           <i class="bi bi-exclamation-triangle-fill"></i>
-          <span id="warningBadge" class="position-absolute top-0 start-100 translate-middle badge bg-warning rounded-pill text-dark" style="z-index: 1;"></span>
+          <span id="warningBadge" class="position-absolute top-0 start-100 translate-middle badge bg-warning rounded-pill text-dark" style="z-index: 1;">0</span>
         </span> 
         <button type="button"  style=" 
         background-color: #d24525; color: white;" class="btn btn btn-img badge position-relative" id="alert" onclick="showWarnings()"><img src="danger.jpg" >

@@ -8,7 +8,7 @@ let timeLeft;
 let timerRunning = null;
 let timerWait = false;
 let warnings = 0;
-let intervall = 1000; 
+let intervall = -1; 
 let bruch = false;
 let weakBalljoints = false;
 let leck = false;
@@ -358,7 +358,7 @@ function sleep(ms) {
 function sleepCheckMachine(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-async function checkForProblems(dataset, data, thresholdA, thresholdB) {
+function checkForProblems(dataset, data, thresholdA, thresholdB) {
   //let min = Math.min.apply(Math, data);
   let max = Math.max.apply(Math, data);
   let badgeIcon = document.getElementById("warningBadge");
@@ -442,36 +442,35 @@ async function checkForProblems(dataset, data, thresholdA, thresholdB) {
 
     let nameField = document.getElementById("placerholderRed");
 
-    if (activeLight !== redLight) {
+    if (/* activeLight !== redLight */ activeLightYellow == true) {
       activeLight.style.opacity = 0.3;
       activeLight = redLight;
       redLight.style.opacity = 1;
     }
 
 /*     console.log(dataset); */
-    if (dataset === "Schmiermittelverbrauch – Temperatur") {
-
+    if (dataset === "Schmiermittelverbrauch – Temperatur" && tasksRed.innerHTML === "") {
+      nameField.innerHTML = '"' + dataset + '"';
       tasksRed.innerHTML = "Step 1: Check for leaks!";
       tasksRed2.innerHTML = "Step 2: Clean motor!";
       tasksRed3.innerHTML = "Step 3: Change Oil!";
-
-      
-
-
-
-
-    } else if (dataset === "Anlageninnenleben – Vibration und Akustik") {
+      return; 
+    } else if (dataset === "Anlageninnenleben – Vibration und Akustik" && tasksRed.innerHTML === "") {
+      nameField.innerHTML = '"' + dataset + '"';
       tasksRed.innerHTML = "Step 1: Check for foreign objects!";
       tasksRed2.innerHTML = "Step 2: Check for wear!";
       tasksRed3.innerHTML = "Step 3: Perform maintenance!";
-    } else if (dataset === "Kugellagerlauf – Vibration und Akustik") {
+      return;
+    } else if (dataset === "Kugellagerlauf – Vibration und Akustik" && tasksRed.innerHTML ==="") {
+      nameField.innerHTML = '"' + dataset + '"';
       tasksRed.innerHTML = "Step 1: Check the bearing for wear!";
       tasksRed2.innerHTML = "Step 2: Check the bearing for contamination!";
       tasksRed3.innerHTML = "Step 3: Add lubricant!";
       tasksRed4.innerHTML = "Step 4: Replace the bearing!";
+      return; 
     }
 
-    nameField.innerHTML = '"' + dataset + '"';
+
   } else if (max > thresholdA) {
     /*     console.log("Yellow line excedded: ", dataset); */
     if (dataset === "Schmiermittelverbrauch – Temperatur" && !weakOil) {
@@ -481,14 +480,17 @@ async function checkForProblems(dataset, data, thresholdA, thresholdB) {
     }
     let dialog = document.getElementById("yellowLine");
     if (dialog !== null && dialog.open.id != dataset) {
-      closeDialogAfterDelay("yellowLine");
+    /*   closeDialogAfterDelay("yellowLine"); */
+    dialog.showModal()
       dialog.id = dataset;
     } 
 
-    let nameField = document.getElementById("placerholderYellow");
-    nameField.innerHTML = '"' + dataset + '"';
-    if (activeLight !== yellowLight && redLight.style.opacity !== 1) {
+    let nameField2 = document.getElementById("placerholderYellow");
+
+    if ( activeLightYellow == false/*  && activeLight !== yellowLight && redLight.style.opacity !== 1 */) {
+      activeLightYellow = true;
       //yellowLight.style.opacity = 0.3;
+      nameField2.innerHTML = '"' + dataset + '"';
       activeLight.style.opacity = 0.3;
       activeLight = yellowLight;
       yellowLight.style.opacity = 1;
@@ -562,11 +564,11 @@ async function visualizeData1() {
         break;
       }
       let timeEnd = timeStart + updateInterval;
-
+/* 
       if (i == timeArray2.length) {
         visualizeData1();
       }
-
+ */
       await sleep(updateInterval * intervall);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
@@ -752,10 +754,10 @@ async function visualizeData3() {
         break;
       } */
 
-      if (i == timeArray2.length) {
+   /*    if (i == timeArray2.length) {
         visualizeData3();
       }
-
+ */
       await sleep(updateInterval * intervall);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
@@ -1142,6 +1144,14 @@ const dialog = document.querySelector("#text-dialog");
 const openDialogBtn = document.querySelector("#open-dialog-btn");
 const closeDialogBtn = document.querySelector("#close-dialog-btn");
 const dialog2 = document.querySelector("#yellowLine");
+
+
+
+
+
+
+
+
 
 
 function main(){
