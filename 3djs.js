@@ -8,7 +8,7 @@ let timeLeft;
 let timerRunning = null;
 let timerWait = false;
 let warnings = 0;
-let intervall = -1; 
+let intervall = 1000; 
 let bruch = false;
 let weakBalljoints = false;
 let leck = false;
@@ -481,8 +481,8 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
     }
     let dialog = document.getElementById("yellowLine");
     if (dialog !== null && dialog.open.id != dataset) {
-    /*   closeDialogAfterDelay("yellowLine"); */
-    dialog.showModal()
+      closeDialogAfterDelay("yellowLine");
+ /*    dialog.showModal() */
       dialog.id = dataset;
     } 
 
@@ -565,11 +565,11 @@ async function visualizeData1() {
         break;
       }
       let timeEnd = timeStart + updateInterval;
-/* 
+
       if (i == timeArray2.length) {
         visualizeData1();
       }
- */
+
       await sleep(updateInterval * intervall);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
@@ -754,10 +754,10 @@ async function visualizeData3() {
         break;
       } */
 
-   /*    if (i == timeArray2.length) {
+      if (i == timeArray2.length) {
         visualizeData3();
       }
- */
+
       await sleep(updateInterval * intervall);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
