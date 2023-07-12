@@ -112,7 +112,6 @@ async function getDataPoints(dataSet, version) {
   XData = [];
   YData = [];
   YData2 = [];
-console.log(dataSet)
 
   switch (version) {
     case "temperatur":
@@ -156,7 +155,6 @@ function checkDifference() {
     if (values.length >= 5) {
         if (Math.abs(values[0] - values[4]) > 6) {
           /*   throw new Error("Die Differenz zwischen dem ersten und dem fünften Wert ist größer oder gleich 6"); */
-          console.log("Differenz größer 6")
         losesTeil1Indiz = true;
         }
     }
@@ -374,13 +372,14 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
       }
       if (!leck && maxSpike1 > 2.5) {
         /*       console.log("Leck"); */
-        warnings = warnings + 1;
-        badgeIcon.innerText = warnings;
+        if(!weakOil) {
+          warnings = warnings + 1;
+          badgeIcon.innerText = warnings;
+        }    
         leck = true;
+        console.log("Leck + 1");
       }
-      if (updateInterval > 0) {
-        break;
-      }
+      break;
     case "Kugellagerlauf – Vibration und Akustik":
       let maxSpike2 = 0;
       for (let i = 0; i <= data.length - 1; i++) {
@@ -391,17 +390,19 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
       }
       if (!bruch && maxSpike2 > 5) {
         /*         console.log("Bruch: ", maxSpike2); */
-        warnings = warnings + 1;
-        badgeIcon.innerText = warnings;
+        if(!weakBalljoints){
+          warnings = warnings + 1;
+          badgeIcon.innerText = warnings;
+        }
         bruch = true;
+        console.log("Bearing + 1");
       } else if (!bruch && !weakBalljoints && maxSpike2 > 0.3) {
         warnings = warnings + 1;
         badgeIcon.innerText = warnings;
         weakBalljoints = true;
+        console.log("Bruch + 1");
       }
-      if (updateInterval > 0) {
-        break;
-      }
+      break;
     case "Anlageninnenleben – Vibration und Akustik":
       let maxSpike3 = 0;
       for (let i = 0; i <= data.length - 1; i++) {
@@ -415,10 +416,9 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
         warnings = warnings + 1;
         badgeIcon.innerText = warnings;
         lose = true;
+        console.log("Lose + 1");
       }
-      if (updateInterval > 0) {
-        break;
-      }
+      break;
     default:
     /*       console.log("Not recognized"); */
   }
@@ -473,10 +473,11 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
 
   } else if (max > thresholdA) {
     /*     console.log("Yellow line excedded: ", dataset); */
-    if (dataset === "Schmiermittelverbrauch – Temperatur" && !weakOil) {
+    if (dataset === "Schmiermittelverbrauch – Temperatur" && !weakOil && !leck) {
       warnings = warnings + 1;
       badgeIcon.innerText = warnings;
       weakOil = true;
+      console.log("WeakOil")
     }
     let dialog = document.getElementById("yellowLine");
     if (dialog !== null && dialog.open.id != dataset) {
@@ -723,7 +724,6 @@ async function visualizeData3() {
   let Xdata = await rawData[0];
   let Ydata = await rawData[1];
   let YData2 = await rawData[2];
-  console.log(Ydata, YData2);
   let timeArray = Xdata.map((str) => str.replace(/\d{2}\.\d{2}\.\d{4}/, ""));
   let timeArray2 = getMinutesEveryFive(timeArray);
   let currentDataX = timeArray2.slice(0, 10);
@@ -765,7 +765,7 @@ async function visualizeData3() {
       receiveData(YData2[i]);
       receiveData2(Ydata[i]);
    
-      console.log("Anlageninnenleben_temp: " + YData2[i] +" Anlageninnenleben_vibration: " + Ydata[i])
+      //console.log("Anlageninnenleben_temp: " + YData2[i] +" Anlageninnenleben_vibration: " + Ydata[i])
      
 
 
@@ -1144,12 +1144,6 @@ const dialog = document.querySelector("#text-dialog");
 const openDialogBtn = document.querySelector("#open-dialog-btn");
 const closeDialogBtn = document.querySelector("#close-dialog-btn");
 const dialog2 = document.querySelector("#yellowLine");
-
-
-
-
-
-
 
 
 
