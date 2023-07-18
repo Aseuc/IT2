@@ -775,6 +775,7 @@ async function visualizeData3() {
         warnings = warnings + 1;
         bd.innerText = warnings;
         lose = true; 
+        
       }       
     }
 
@@ -1070,7 +1071,7 @@ function showWarnings() {
         inner +
         cardHeader +
         cardBody +
-        '<h5 class="card-title" style="color: #e0eb44;">' +
+        '<h5 class="card-title" style="color:#f5d742;">' +
         "Check oil!" +
         "</h5>" +
         '<p class="card-text" style="line-height: 2;">' +
@@ -1085,7 +1086,7 @@ function showWarnings() {
         inner +
         cardHeader +
         cardBody +
-        '<h5 class="card-title" style="color:#e0eb44;">' +
+        '<h5 class="card-title" style="color:#f5d742;">' +
         "Check ball-bearings" +
         "</h5>" +
         '<p class="card-text" style="line-height: 2;">' +
@@ -1100,7 +1101,7 @@ function showWarnings() {
         inner +
         cardHeader +
         cardBody +
-        '<h5 class="card-title" style="color: red;">' +
+        '<h5 class="card-title" style="color: #f5d742;">' +
         "Leakage detected" +
         "</h5>" +
         '<p class="card-text" style="line-height: 2;">' +
@@ -1115,7 +1116,7 @@ function showWarnings() {
         inner +
         cardHeader +
         cardBody +
-        '<h5 class="card-title" style="color: red;">' +
+        '<h5 class="card-title" style="color: #f5d742;">' +
         "Breakage detected" +
         "</h5>" +
         '<p class="card-text" style="line-height: 2;">' +
@@ -1130,7 +1131,7 @@ function showWarnings() {
         inner +
         cardHeader +
         cardBody +
-        '<h5 class="card-title" style="color: red;">' +
+        '<h5 class="card-title" style="color: #f5d742;">' +
         "Lose parts detected" +
         "</h5>" +
         '<p class="card-text" style="line-height: 2;">' +
