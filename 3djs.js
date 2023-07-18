@@ -8,14 +8,14 @@ let timeLeft;
 let timerRunning = null;
 let timerWait = false;
 let warnings = 0;
-let intervall = 1000; 
+let intervall = 0; 
 let bruch = false;
 let weakBalljoints = false;
 let leck = false;
 let weakOil = false;
 let lose = false;
 let machineStopped = false;
-
+let teil = false;
 let losesTeil1Indiz = false; 
 let losesTeil2Indiz =false;
 
@@ -38,8 +38,8 @@ whiteLight.style.opacity = 1;
 async function getData(version) {
   let response = [];
 
-  let randmonDataSet = Math.floor(Math.random() * 4);
-/*   let randmonDataSet = 2; */
+/*   let randmonDataSet = Math.floor(Math.random() * 4); */
+  let randmonDataSet = 3;
 
 
 
@@ -108,6 +108,7 @@ async function getData(version) {
 
   return getDataPoints(response, version);
 }
+
 async function getDataPoints(dataSet, version) {
   XData = [];
   YData = [];
@@ -144,19 +145,18 @@ async function getDataPoints(dataSet, version) {
   return [XData, YData,YData2];
 }
 
-
-
-
-
-
 let values = [[],[]];
 
 async function checkDifference() {
     if (values[0].length >= 5 && values[1].length >= 5) {
-      console.log("Temperaturdifferenz nicht größer 6 aktuell: " + Math.abs(values[0][0] - values[0][4]) + "und Virbationdifferenz größer 0.02 aktuell:" + Math.abs(values[1][0] - values[1][4]))
-        if (Math.abs(values[0][0] - values[0][4]) > 6 && Math.abs(values[1][0] - values[1][4] > 0.02)) {
-          console.log("Temperaturdifferenz größer 6 aktuell: " + Math.abs(values[0][0] - values[0][4]) +Math.abs(values[1][0] - values[1][4]) +"und Virbationdifferenz größer 0.02")
-          lose = true;
+      
+        if (Math.abs(values[0][0] - values[0][4]) > 6 || Math.abs(values[1][0] - values[1][4] > 0.02)) {
+          console.log("Temperaturdifferenz größer 6 aktuell: " + Math.abs(values[0][0] - values[0][4]) + Math.abs(values[1][0] - values[1][4]) +" oder Virbationdifferenz größer 0.02")
+          teil = true; 
+        }else if(Math.abs(values[0][0] - values[0][4]) < 6 || Math.abs(values[1][0] - values[1][4] < 0.02)){
+          console.log("Temperaturdifferenz nicht größer 6 aktuell: " + Math.abs(values[0][0] - values[0][4]) + " oder Virbationdifferenz größer 0.02 aktuell:" + Math.abs(values[1][0] - values[1][4]))
+
+          teil = false; 
         }
     }
 }
@@ -170,7 +170,7 @@ async function receiveData(value, value2) {
         values[0].shift();
         values[1].shift();
     }
-    checkDifference();
+    return checkDifference();
 }
 
 /* 
@@ -401,7 +401,7 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
         console.log("Bruch + 1");
       }
       break;
-    case "Anlageninnenleben – Vibration und Akustik":
+  /*   case "Anlageninnenleben – Vibration und Akustik":
       let maxSpike3 = 0;
       for (let i = 0; i <= data.length - 1; i++) {
         let tempSpike = data[i + 1] - data[i];
@@ -409,14 +409,15 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
           maxSpike3 = tempSpike;
         }
       }
-      if (lose) {
+      if (!lose) {
         /*         console.log("Lose Teile: ", maxSpike3); */
         warnings = warnings + 1;
         badgeIcon.innerText = warnings;
+        
         lose = true;
         console.log("Lose + 1");
-      }
-      break;
+      /* }
+      break; */
     default:
     /*       console.log("Not recognized"); */
   }
@@ -762,7 +763,21 @@ async function visualizeData3() {
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
 
-      receiveData(YData2[i], Ydata[i]);
+  
+      let bd = document.getElementById("warningBadge");
+
+
+      console.log(receiveData(YData2[i], Ydata[i]))
+      if (lose == false){
+   
+       if(teil == true && lose == false){
+
+        warnings = warnings + 1;
+        bd.innerText = warnings;
+        lose = true; 
+      }       
+    }
+
    
       //console.log("Anlageninnenleben_temp: " + YData2[i] +" Anlageninnenleben_vibration: " + Ydata[i])
      
