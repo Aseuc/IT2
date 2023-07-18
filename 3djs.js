@@ -39,7 +39,7 @@ async function getData(version) {
   let response = [];
 /* 
   let randmonDataSet = Math.floor(Math.random() * 4); */
-  let randmonDataSet = 2;
+  let randmonDataSet = 3;
 
 
 
@@ -150,27 +150,31 @@ console.log(dataSet)
 
 
 
-let values = [];
+let values = [[],[]];
 
-function checkDifference() {
-    if (values.length >= 5) {
-        if (Math.abs(values[0] - values[4]) > 6) {
-          /*   throw new Error("Die Differenz zwischen dem ersten und dem fünften Wert ist größer oder gleich 6"); */
-          console.log("Differenz größer 6")
-        losesTeil1Indiz = true;
+async function checkDifference() {
+    if (values[0].length >= 5 && values[1].length >= 5) {
+      console.log("Temperaturdifferenz nicht größer 6 aktuell: " + Math.abs(values[0][0] - values[0][4]) + "und Virbationdifferenz größer 0.02 aktuell:" + Math.abs(values[1][0] - values[1][4]))
+        if (Math.abs(values[0][0] - values[0][4]) > 6 && Math.abs(values[1][0] - values[1][4] > 0.02)) {
+          console.log("Temperaturdifferenz größer 6 aktuell: " + Math.abs(values[0][0] - values[0][4]) +Math.abs(values[1][0] - values[1][4]) +"und Virbationdifferenz größer 0.02")
+          lose = true;
         }
     }
 }
 
-function receiveData(value) {
-    values.push(value);
-    if (values.length > 5) {
-        values.shift();
+async function receiveData(value, value2) {
+
+    values[0].push(value);
+    values[1].push(value2);
+    console.log(values)
+    if (values[0].length > 5 && values[1].length > 5) {
+        values[0].shift();
+        values[1].shift();
     }
     checkDifference();
 }
 
-
+/* 
 let values2 = [];
 
 function checkDifference2() {
@@ -188,7 +192,7 @@ function receiveData2(value2) {
         values2.shift();
     }
     checkDifference2();
-}
+} */
 
 
 
@@ -410,7 +414,7 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
           maxSpike3 = tempSpike;
         }
       }
-      if (!lose && maxSpike3 >= 0.3) {
+      if (lose) {
         /*         console.log("Lose Teile: ", maxSpike3); */
         warnings = warnings + 1;
         badgeIcon.innerText = warnings;
@@ -479,7 +483,7 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
       weakOil = true;
     }
     let dialog = document.getElementById("yellowLine");
-    if (dialog !== null && dialog.open.id != dataset) {
+    if (dialog !== null && dialog.open.id !== dataset) {
       closeDialogAfterDelay("yellowLine");
  /*    dialog.showModal() */
       dialog.id = dataset;
@@ -727,10 +731,12 @@ async function visualizeData3() {
   let timeArray = Xdata.map((str) => str.replace(/\d{2}\.\d{2}\.\d{4}/, ""));
   let timeArray2 = getMinutesEveryFive(timeArray);
   let currentDataX = timeArray2.slice(0, 10);
+  
   Ydata = Ydata.map(function (value) {
     return value.replace(",", ".");
   });
   let currentDataY = Ydata.slice(0, 10);
+
   YData2 = YData2.map(function (value) {
      return value.replace(",", ".");
   });
@@ -762,8 +768,7 @@ async function visualizeData3() {
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
 
-      receiveData(YData2[i]);
-      receiveData2(Ydata[i]);
+      receiveData(YData2[i], Ydata[i]);
    
       console.log("Anlageninnenleben_temp: " + YData2[i] +" Anlageninnenleben_vibration: " + Ydata[i])
      
