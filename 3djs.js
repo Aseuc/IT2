@@ -37,9 +37,9 @@ whiteLight.style.opacity = 1;
 
 async function getData(version) {
   let response = [];
-/* 
-  let randmonDataSet = Math.floor(Math.random() * 4); */
-  let randmonDataSet = 2;
+
+  let randmonDataSet = Math.floor(Math.random() * 4);
+/*   let randmonDataSet = 2; */
 
 
 
@@ -188,13 +188,6 @@ function receiveData2(value2) {
     checkDifference2();
 }
 
-
-
-
-
-
-
-
 function closeDialogAfterDelay(dialogId) {
   let dialog = document.getElementById(dialogId);
   let timeLeft = 10;
@@ -202,11 +195,11 @@ function closeDialogAfterDelay(dialogId) {
   let timer = setInterval(function () {
     if (timeLeft == 0) {
       clearInterval(timer);
-      document.getElementById("timer").innerHTML = "Anzeige wird geschlossen!";
+      document.getElementById("timer").innerHTML = "Alert closed!";
       dialog.close();
     } else {
       document.getElementById("timer").innerHTML =
-        "Anzeige wird in " + timeLeft + " Sekunden geschlossen!";
+        "Alert will close in: " + timeLeft + " seconds!";
     }
     timeLeft -= 1;
   }, 1000);
