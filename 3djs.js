@@ -50,8 +50,8 @@ whiteLight.style.opacity = 1;
 async function getData(version) {
   let response = [];
 
-  let randmonDataSet = Math.floor(Math.random() * 4);
-/*   let randmonDataSet = 3; */
+/*   let randmonDataSet = Math.floor(Math.random() * 4); */
+  let randmonDataSet = 3;
 
 
 
