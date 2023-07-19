@@ -8,7 +8,7 @@ let timeLeft;
 let timerRunning = null;
 let timerWait = false;
 let warnings = 0;
-let intervall = 0; 
+let intervall = 1000; 
 let bruch = false;
 let weakBalljoints = false;
 let leck = false;
@@ -34,7 +34,7 @@ let zoomed = false;
 let activeLightYellow = false; 
 let activeLightRed = false;
 
-
+let counter = 0;
 const redLight = document.getElementById("redlight");
 const yellowLight = document.getElementById("yellowlight");
 const greenLight = document.getElementById("greenlight");
@@ -46,6 +46,8 @@ let btnContinue = document.getElementById("btnContinue");
 let btnStopMachine = document.getElementById("btnStopMachine");
 
 whiteLight.style.opacity = 1;
+let e = document.getElementById('timer-btn');
+
 
 async function getData(version) {
   let response = [];
@@ -280,6 +282,7 @@ function getCurrentTime() {
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
   const seconds = date.getSeconds().toString().padStart(2, "0");
+
   return `${hours}:${minutes}:${seconds}`;
 }
 function drop() {
@@ -856,6 +859,7 @@ async function visualizeData3() {
   );
 }
 function RenderChart(renderData, YData, timeArray2) {
+
   if (machineStopped == false && zoomStopped == false) {
    /*  if (zoomStopped == false) { */
     if (renderData[0].chartID === 1) {
@@ -1274,12 +1278,13 @@ button.addEventListener("click", () => {
   dialog.style.display = "block";
 }); */
 
-
+let f = setInterval(() => {
+  e.innerHTML = getCurrentTime();
+}, 1000);
 function main(){
 visualizeData1();
 visualizeData2();
 visualizeData3();
-
 
 if (machineStopped == true){
   console.log("Machine stopped");
