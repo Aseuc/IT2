@@ -15,7 +15,7 @@ let leck = false;
 let weakOil = false;
 let lose = false;
 let machineStopped = false;
-
+let zoomStopped = false;
 let rd1 = null;
 let rd2 = null; 
 let rd3 = null; 
@@ -51,7 +51,7 @@ async function getData(version) {
   let response = [];
 
 /*   let randmonDataSet = Math.floor(Math.random() * 4); */
-  let randmonDataSet = 3;
+  let randmonDataSet = 2;
 
 
 
@@ -509,10 +509,15 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
     }
   }
 }
+
+
 function stopMachine() {
   machineStopped = true;
   return machineStopped;
 }
+
+
+
 function continueMachine() {
   machineStopped = false;
   return machineStopped;
@@ -719,7 +724,9 @@ async function visualizeData2() {
   if (machineStopped == true) {
     return;}
 
-
+  if (zoomStopped == true){
+    return;
+  }
 
 
 
@@ -849,7 +856,8 @@ async function visualizeData3() {
   );
 }
 function RenderChart(renderData, YData, timeArray2) {
-  if (machineStopped == false) {
+  if (machineStopped == false && zoomStopped == false) {
+   /*  if (zoomStopped == false) { */
     if (renderData[0].chartID === 1) {
       if (chart1 !== undefined) {
         chart1.updateSeries([
@@ -919,12 +927,12 @@ function RenderChart(renderData, YData, timeArray2) {
 
             let icon = document.getElementsByClassName("apexcharts-reset-icon")  
             
-            machineStopped = true;
+            zoomStopped = true;
             
             icon[0].addEventListener("click", function(e) {
                
                  
-                  machineStopped = false;
+                  zoomStopped = false;
                   RenderChart(renderData, renderDataY1, renderDataX1)
 
 
@@ -934,7 +942,7 @@ function RenderChart(renderData, YData, timeArray2) {
             icon[1].addEventListener("click", function(e) {
      
             
-              machineStopped = false;
+              zoomStopped = false;
               RenderChart(renderData, renderDataY2, renderDataX2)
 
 
@@ -942,7 +950,7 @@ function RenderChart(renderData, YData, timeArray2) {
 
         icon[2].addEventListener("click", function(e) {
           
-          machineStopped = false;
+          zoomStopped = false;
           RenderChart(renderData, renderDataY3, renderDataX3)
 
 
@@ -1087,6 +1095,7 @@ function RenderChart(renderData, YData, timeArray2) {
       /*     console.log("Render 3"); */
       chart3.render();
     }
+  /* }  */
   } else {
     renderData = [];
   }
@@ -1225,8 +1234,8 @@ function showWarnings() {
 
 function onScroll() {
   
-  if (machineStopped == true){
-    machineStopped = false;
+  if (zoomStopped == true){
+    zoomStopped = false;
     RenderChart(rd1, renderDataY1, renderDataX1)
     RenderChart(rd2, renderDataY2, renderDataX2)
     RenderChart(rd3, renderDataY3, renderDataX3)
@@ -1246,7 +1255,22 @@ const openDialogBtn = document.querySelector("#open-dialog-btn");
 const closeDialogBtn = document.querySelector("#close-dialog-btn");
 const dialog2 = document.querySelector("#yellowLine");
 
+/* const button = document.getElementById("open-dialog-btn");
 
+button.addEventListener("click", () => {
+  // Create a new dialog
+  const dialog = document.createElement("div");
+  dialog.classList.add("dialog");
+
+  // Add some content to the dialog
+  dialog.textContent = "This is a dialog";
+
+  // Add the dialog to the DOM
+  document.body.appendChild(dialog);
+
+  // Open the dialog
+  dialog.style.display = "block";
+}); */
 
 
 function main(){
@@ -1258,6 +1282,9 @@ visualizeData3();
 if (machineStopped == true){
   console.log("Machine stopped");
   return;
+}
+if (zoomStopped == true){
+  return; 
 }
 }
 
