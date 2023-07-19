@@ -15,10 +15,22 @@ let leck = false;
 let weakOil = false;
 let lose = false;
 let machineStopped = false;
+
+let rd1 = null;
+let rd2 = null; 
+let rd3 = null; 
+
+let renderDataY1 = null;
+let renderDataX1 = null;
+let renderDataY2  = null; 
+let renderDataX2 = null; 
+let renderDataY3 = null; 
+let renderDataX3 = null; 
+
 let teil = false;
 let losesTeil1Indiz = false; 
 let losesTeil2Indiz =false;
-
+let zoomed = false; 
 let activeLightYellow = false; 
 let activeLightRed = false;
 
@@ -60,7 +72,7 @@ async function getData(version) {
 
     case 1:
       if (FETCHED_DATA[1].length === 0) {
-        console.log(FETCHED_DATA[1]);
+  /*       console.log(FETCHED_DATA[1]); */
         response = await (
           await fetch("https://it2wi1.if-lab.de/rest/mpr_fall2")
         ).json();
@@ -518,13 +530,15 @@ async function visualizeData1() {
       toleranzWert: 75,
       innenleben: "Schmiermittelverbrauch Normal: ",
       chartID: 1,
-      yText: "Tavg_laut",
+      yText: "Tavg_temp",
       offsetX_S: 140,
       offsetX_T: 127,
       min: 0,
       max: 300
     }
   ];
+
+  rd1 = renderData1
 
   let rawData = await getData("temperatur");
   let Xdata = await rawData[0];
@@ -572,6 +586,14 @@ async function visualizeData1() {
       await sleep(updateInterval * intervall);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
+      
+      /* console.log(currentDataX, currentDataY); */
+      renderDataY1 = currentDataY
+      renderDataX1 = currentDataX
+       
+
+
+
 /*       currentDataY2 = Ydata2.slice(0, timeEnd)
       checkIncomingData(currentDataY[i],currentDataY2[i]) */
 
@@ -629,6 +651,9 @@ async function visualizeData2() {
     }
   ];
 
+
+  rd2 = renderData2
+
   let rawData = await getData("laut");
 
   let Xdata = await rawData[0];
@@ -662,6 +687,11 @@ async function visualizeData2() {
       await sleep(updateInterval * intervall);
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
+      
+      renderDataY2 = currentDataY
+      renderDataX2 = currentDataX
+
+
       RenderChart(renderData2, currentDataY, currentDataX);
       checkForProblems(
         renderData2[0].title,
@@ -718,6 +748,8 @@ async function visualizeData3() {
     }
   ];
 
+  rd3 = renderData3
+
   let rawData = await getData("vibration");
 
   let Xdata = await rawData[0];
@@ -763,11 +795,12 @@ async function visualizeData3() {
       currentDataX[i] = getCurrentTime();
       currentDataY = Ydata.slice(0, timeEnd);
 
-  
+      renderDataY3 = currentDataY
+      renderDataX3 = currentDataX
       let bd = document.getElementById("warningBadge");
 
 
-      console.log(receiveData(YData2[i], Ydata[i]))
+     /*  console.log(receiveData(YData2[i], Ydata[i])) */
       if (lose == false){
    
        if(teil == true && lose == false){
@@ -881,6 +914,47 @@ function RenderChart(renderData, YData, timeArray2) {
         }
       },
       chart: {
+        events: {
+          zoomed: function(chartContext, { xaxis, yaxis }) {
+
+            let icon = document.getElementsByClassName("apexcharts-reset-icon")  
+            
+            machineStopped = true;
+            
+            icon[0].addEventListener("click", function(e) {
+               
+                 
+                  machineStopped = false;
+                  RenderChart(renderData, renderDataY1, renderDataX1)
+
+
+            });
+
+
+            icon[1].addEventListener("click", function(e) {
+     
+            
+              machineStopped = false;
+              RenderChart(renderData, renderDataY2, renderDataX2)
+
+
+        });
+
+        icon[2].addEventListener("click", function(e) {
+          
+          machineStopped = false;
+          RenderChart(renderData, renderDataY3, renderDataX3)
+
+
+    });
+
+
+            
+
+         
+
+          }
+        },
         fontFamily: "Roboto, sans-serif",
         type: "line",
         width: 600,
@@ -1152,6 +1226,23 @@ function showWarnings() {
 
 
 
+function onScroll() {
+
+  let scrollY = window.scrollY;
+  machineStopped = false; 
+  console.log(scrollY);
+
+  RenderChart(rd1, renderDataY1, renderDataX1)
+  RenderChart(rd2, renderDataY2, renderDataX2)
+  RenderChart(rd3, renderDataY3, renderDataX3)
+
+ 
+
+
+}
+
+
+window.addEventListener("scroll", onScroll);
 
 
 
