@@ -8,7 +8,7 @@ let timeLeft;
 let timerRunning = null;
 let timerWait = false;
 let warnings = 0;
-let intervall = 1000; 
+let intervall = 0; 
 let bruch = false;
 let weakBalljoints = false;
 let leck = false;
@@ -50,8 +50,8 @@ whiteLight.style.opacity = 1;
 async function getData(version) {
   let response = [];
 
-/*   let randmonDataSet = Math.floor(Math.random() * 4); */
-  let randmonDataSet = 2;
+  let randmonDataSet = Math.floor(Math.random() * 4);
+/*   let randmonDataSet = 2; */
 
 
 
