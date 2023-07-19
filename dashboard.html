@@ -31,16 +31,16 @@
 <!-- Durch background-color:...; im Tag <body> wird die gewünschte Hintergrundfarbe festgelegt -->
 <body onload="timer()" style="background-color: #717e87;">
   <dialog class="dialogModal" id="succUpdateDialog">
-    <p>Update Interval set! <br> Please wait for the countdown to finish for it to take effect</p>
+<!--     <p>Update Interval set! <br> Please wait for the countdown to finish for it to take effect</p> -->
     <form method="dialog">
       <button class="btn btn-primary" style="float: right; margin-right: 8rem;" value="cancel" formmethod="dialog">OK</button>
     </form>
   </dialog>
   <dialog class="dialogModal" id="yellowLine">
     <div id="containerBlockYellowText">
-      <p>It looks like you should be monitoring the</p>
+      <p>Es schaut so aus, dass Sie</p>
       <p id="placerholderYellow"></p>
-      <p>closly and take the necessary actions! </p>
+      <p>genauer überwachen sollten! </p>
     </div>
     <p id="timer"></p>
 
@@ -53,7 +53,7 @@
     <div id="containerBlockRedText" style="display: inline;">
       <p>Warning! Your </p>
       <p id="placerholderRed"></p>
-      <p> is exceeding it's designed specification!</p>
+      <p> überschreitet seine zugelassene Spezifikation!</p>
     </div>
     <p id="tasksRed1"></p>
     <p id="tasksRed2"></p>
@@ -66,9 +66,9 @@
     <p id="tasksRed9"></p>
     <p id="tasksRed10"></p>
     <p id="tasksRed11"></p>
-    <p>If all problems are solved click "Restart Machine"!</p>
+    <p>Wenn alle Probleme behoben wurden können Sie auf "Maschine neustarten" klicken!</p>
     <form method="dialog" style="text-align: center;">
-      <button class="btn btn-danger" id="btnStopMachine" value="cancel" formmethod="dialog" onclick="reloadPage()">Restart Machine</button>
+      <button class="btn btn-danger" id="btnStopMachine" value="cancel" formmethod="dialog" onclick="reloadPage()">Maschine neustarten!</button>
       
     </form>
   </dialog>
@@ -94,7 +94,16 @@
   </div>  
 
 
-
+  <dialog class="dialogModal" id="eskalation">
+    <div id="containerBlockYellowText">
+      <label>Kontaktieren Sie Ihren Technischen-Ansprechpartner!</label>
+      <textarea style="margin-top: 1rem;" class="form-control" id="myTextarea" cols="30" rows="10"></textarea>
+    </div>
+    <form method="dialog">
+      <button class="btn btn-success"  style="margin-top: 1rem;" ="cancel" formmethod="dialog">Senden</button>
+      <button class="btn btn-danger" style="margin-top: 1rem;" formmethod="dialog" >Abbrechen</button>
+    </form>
+  </dialog>
 
 <!-- Der Dialog -->
 <!-- <div id="text-dialog" class="modal" tabindex="-1">
@@ -166,8 +175,8 @@
         </button>       
         <button type="button" style=" pointer-events:none; 
         background-color: #217446; color: white;" class="btn btn" id="timer-btn">Timer</button>
-        <button type="button" style=" pointer-events:none; 
-        background-color: #d24525; color: white;" class="btn btn">Eskalation</button>
+        <button type="button" style="
+        background-color: #d24525; color: white;" onclick = "messageTech()" class="btn btn">Eskalation</button>
         </div>
       </div>
       

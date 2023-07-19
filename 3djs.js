@@ -8,7 +8,7 @@ let timeLeft;
 let timerRunning = null;
 let timerWait = false;
 let warnings = 0;
-let intervall = 1000; 
+let intervall = 0; 
 let bruch = false;
 let weakBalljoints = false;
 let leck = false;
@@ -50,8 +50,8 @@ whiteLight.style.opacity = 1;
 async function getData(version) {
   let response = [];
 
-  let randmonDataSet = Math.floor(Math.random() * 4);
-/*   let randmonDataSet = 2; */
+ /*  let randmonDataSet = Math.floor(Math.random() * 4); */
+  let randmonDataSet = 2;
 
 
 
@@ -216,7 +216,7 @@ function closeDialogAfterDelay(dialogId) {
       dialog.close();
     } else {
       document.getElementById("timer").innerHTML =
-        "Alert will close in: " + timeLeft + " seconds!";
+        "Anzeige wird in: " + timeLeft + " Sekunden schließen!";
     }
     timeLeft -= 1;
   }, 1000);
@@ -462,22 +462,22 @@ function checkForProblems(dataset, data, thresholdA, thresholdB) {
 /*     console.log(dataset); */
     if (dataset === "Schmiermittelverbrauch – Temperatur" && tasksRed.innerHTML === "") {
       nameField.innerHTML = '"' + dataset + '"';
-      tasksRed.innerHTML = "Step 1: Check for leaks!";
-      tasksRed2.innerHTML = "Step 2: Clean motor!";
-      tasksRed3.innerHTML = "Step 3: Change Oil!";
+      tasksRed.innerHTML = "Lösung 1: Suchen Sie nach Lecks!";
+      tasksRed2.innerHTML = "Lösung 2: Reinigen Sie den Motor!";
+      tasksRed3.innerHTML = "Lösung 3: Wechseln Sie das Öl!";
       return; 
     } else if (dataset === "Anlageninnenleben – Vibration und Akustik" && tasksRed.innerHTML === "") {
       nameField.innerHTML = '"' + dataset + '"';
-      tasksRed.innerHTML = "Step 1: Check for foreign objects!";
-      tasksRed2.innerHTML = "Step 2: Check for wear!";
-      tasksRed3.innerHTML = "Step 3: Perform maintenance!";
+      tasksRed.innerHTML = "Lösung 1: Überprüfen Sie das Anlageninnenleben auf Fremdkörper!";
+      tasksRed2.innerHTML = "Lösung 2: Prüfen Sie auf Verschleiß!";
+      tasksRed3.innerHTML = "Lösung 3: Führen Sie eine Wartung durch!";
       return;
     } else if (dataset === "Kugellagerlauf – Vibration und Akustik" && tasksRed.innerHTML ==="") {
       nameField.innerHTML = '"' + dataset + '"';
-      tasksRed.innerHTML = "Step 1: Check the bearing for wear!";
-      tasksRed2.innerHTML = "Step 2: Check the bearing for contamination!";
-      tasksRed3.innerHTML = "Step 3: Add lubricant!";
-      tasksRed4.innerHTML = "Step 4: Replace the bearing!";
+      tasksRed.innerHTML = "Lösung 1: Überprüfen Sie das Kugellager auf Verschleiß!";
+      tasksRed2.innerHTML = "Lösung 2: Überprüfen Sie das Kugellager auf Verschmutzung!";
+      tasksRed3.innerHTML = "Lösung 3: Schmieren Sie das Kugellager!";
+      tasksRed4.innerHTML = "Lösung 4: Ersetzen Sie das Kugellager!";
       return; 
     }
 
@@ -1125,102 +1125,102 @@ function getMinutesEveryFive(array) {
 }
 function showWarnings() {
   let targetModal = document.getElementById("warningModal");
-  let inner = "All problems are listed below:<br>";
+  let inner = "Alle Probleme sind unten aufgeführt:<br>";
   let cardHeader =
-    '<div class="card" style="width: 18rem; margin-top:2rem; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">';
+  '<div class="card" style="width: 18rem; margin-top:2rem; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">';
   let cardBody = '<div class="card-body">';
   let cardEnd = "</div></div>";
-
+  
   if (warnings === 0) {
-    /*     console.log("Warning pressed"); */
-    let text =
-      "There are no signs of failures within the machine. <br> Keep monitoring the setup closely.";
-    inner =
-      inner +
-      cardHeader +
-      cardBody +
-      '<h5 class="card-title" style="color: green;">' +
-      "All good" +
-      "</h5>" +
-      '<p class="card-text" style="line-height: 2;">' +
-      text +
-      "</p>" +
-      cardEnd;
+  /*     console.log("Warning pressed"); */
+  let text =
+  "Es gibt keine Anzeichen für Probleme in der Maschine. <br> Behalten Sie die Einrichtung weiterhin genau im Auge.";
+  inner =
+  inner +
+  cardHeader +
+  cardBody +
+  '<h5 class="card-title" style="color: green;">' +
+  "Alles in Ordnung!" +
+  "</h5>" +
+  '<p class="card-text" style="line-height: 2;">' +
+  text +
+  "</p>" +
+  cardEnd;
   } else {
-    if (weakOil && !leck) {
-      let text01 =
-        "<p> The oil is most likely going bad! <br> You should request a technician to inspect the oil as soon as possible to prevent damage.</p>";
-      inner =
-        inner +
-        cardHeader +
-        cardBody +
-        '<h5 class="card-title" style="color:#f5d742;">' +
-        "Check oil!" +
-        "</h5>" +
-        '<p class="card-text" style="line-height: 2;">' +
-        text01 +
-        "</p>" +
-        cardEnd;
-    }
-    if (weakBalljoints && !bruch) {
-      let text02 =
-        "<p> The ball-bearings are most likely going bad! <br> You should request a technician to inspect the ball-bearings as soon as possible to prevent damage.</p>";
-      inner =
-        inner +
-        cardHeader +
-        cardBody +
-        '<h5 class="card-title" style="color:#f5d742;">' +
-        "Check ball-bearings" +
-        "</h5>" +
-        '<p class="card-text" style="line-height: 2;">' +
-        text02 +
-        "</p>" +
-        cardEnd;
-    }
-    if (leck) {
-      let text1 =
-        "<p> It looks like the motor is leaking oil resulting in rapid overheating! <br> You should immediatly request a technician to inspect any potetial damage.</p>";
-      inner =
-        inner +
-        cardHeader +
-        cardBody +
-        '<h5 class="card-title" style="color: #f5d742;">' +
-        "Leakage detected" +
-        "</h5>" +
-        '<p class="card-text" style="line-height: 2;">' +
-        text1 +
-        "</p>" +
-        cardEnd;
-    }
-    if (bruch) {
-      let text2 =
-        "<p> It is highly likely a part of the machine broke off! <br> You should immediatly request a technician to inspect any potetial damage.</p>";
-      inner =
-        inner +
-        cardHeader +
-        cardBody +
-        '<h5 class="card-title" style="color: #f5d742;">' +
-        "Breakage detected" +
-        "</h5>" +
-        '<p class="card-text" style="line-height: 2;">' +
-        text2 +
-        "</p>" +
-        cardEnd;
-    }
-    if (lose) {
-      let text3 =
-        "<p> There seem to be parts of  <br> You should immediatly request a technician to inspect any potetial damage.</p>";
-      inner =
-        inner +
-        cardHeader +
-        cardBody +
-        '<h5 class="card-title" style="color: #f5d742;">' +
-        "Lose parts detected" +
-        "</h5>" +
-        '<p class="card-text" style="line-height: 2;">' +
-        text3 +
-        "</p>" +
-        cardEnd;
+  if (weakOil && !leck) {
+  let text01 =
+  "<p> Das Öl ist wahrscheinlich schlecht! <br> Sie sollten so bald wie möglich einen Techniker beauftragen, das Öl zu inspizieren, um Schäden zu vermeiden.</p>";
+  inner =
+  inner +
+  cardHeader +
+  cardBody +
+  '<h5 class="card-title" style="color:#f5d742;">' +
+  "Öl prüfen!" +
+  "</h5>" +
+  '<p class="card-text" style="line-height: 2;">' +
+  text01 +
+  "</p>" +
+  cardEnd;
+  }
+  if (weakBalljoints && !bruch) {
+  let text02 =
+  "<p> Die Kugellager sind wahrscheinlich starkt verschleißt! <br> Sie sollten so bald wie möglich einen Techniker beauftragen, die Kugellager zu inspizieren, um Schäden zu vermeiden.</p>";
+  inner =
+  inner +
+  cardHeader +
+  cardBody +
+  '<h5 class="card-title" style="color:#f5d742;">' +
+  "Kugellager prüfen" +
+  "</h5>" +
+  '<p class="card-text" style="line-height: 2;">' +
+  text02 +
+  "</p>" +
+  cardEnd;
+  }
+  if (leck) {
+  let text1 =
+  "<p> Es sieht so aus, als ob der Motor Öl leckt, was zu einer rapiden Überhitzung führt! <br> Sie sollten sofort einen Techniker beauftragen, um mögliche Schäden zu inspizieren.</p>";
+  inner =
+  inner +
+  cardHeader +
+  cardBody +
+  '<h5 class="card-title" style="color: #f5d742;">' +
+  "Ölverlust festgestellt" +
+  "</h5>" +
+  '<p class="card-text" style="line-height: 2;">' +
+  text1 +
+  "</p>" +
+  cardEnd;
+  }
+  if (bruch) {
+  let text2 =
+  "<p> Es ist sehr wahrscheinlich, dass ein Teil der Maschine abgebrochen ist! <br> Sie sollten sofort einen Techniker beauftragen, um mögliche Schäden zu inspizieren.</p>";
+  inner =
+  inner +
+  cardHeader +
+  cardBody +
+  '<h5 class="card-title" style="color: #f5d742;">' +
+  "Ein Bruch wurde festgestellt!" +
+  "</h5>" +
+  '<p class="card-text" style="line-height: 2;">' +
+  text2 +
+  "</p>" +
+  cardEnd;
+  }
+  if (lose) {
+    let text3 =
+    "<p>Es scheinen Teile von <br> Sie sollten sofort einen Techniker beauftragen, um mögliche Schäden zu inspizieren.</p>";
+    inner =
+    inner +
+    cardHeader +
+    cardBody +
+    '<h5 class="card-title" style="color: #f5d742;">' +
+    "Lose Teile wurden festgestellt!" +
+    "</h5>" +
+    '<p class="card-text" style="line-height: 2;">' +
+    text3 +
+    "</p>" +
+    cardEnd;
     }
   }
   inner =
@@ -1247,8 +1247,10 @@ function onScroll() {
 
 
 window.addEventListener("scroll", onScroll);
-
-
+let eskaDia = document.getElementById("eskalation");
+function messageTech(){
+  eskaDia.showModal();
+}
 
 const dialog = document.querySelector("#text-dialog");
 const openDialogBtn = document.querySelector("#open-dialog-btn");
