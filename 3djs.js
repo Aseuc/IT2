@@ -1223,9 +1223,6 @@ function showWarnings() {
   targetModal.innerHTML = inner;
 }
 
-
-
-
 function onScroll() {
 
   let scrollY = window.scrollY;
