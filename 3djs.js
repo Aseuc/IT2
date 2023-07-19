@@ -1281,6 +1281,7 @@ button.addEventListener("click", () => {
 let f = setInterval(() => {
   e.innerHTML = getCurrentTime();
 }, 1000);
+
 function main(){
 visualizeData1();
 visualizeData2();
