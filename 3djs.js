@@ -1228,11 +1228,12 @@ function onScroll() {
   let scrollY = window.scrollY;
   machineStopped = false; 
   console.log(scrollY);
-
+  if (machineStopped == true){
+    machineStopped = false;
   RenderChart(rd1, renderDataY1, renderDataX1)
   RenderChart(rd2, renderDataY2, renderDataX2)
   RenderChart(rd3, renderDataY3, renderDataX3)
-
+  }
  
 
 
