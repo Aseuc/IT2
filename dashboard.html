@@ -87,7 +87,7 @@
       <textarea style="margin-top: 1rem;" class="form-control" id="myTextarea" cols="30" rows="10"></textarea>
     </div>
     <form method="dialog">
-      <button class="btn btn-success"  style="margin-top: 1rem;" value="cancel" formmethod="dialog">Senden</button>
+      <button class="btn btn-success"  style="margin-top: 1rem;" value="cancel" onclick="sendMail()" formmethod="dialog">Senden</button>
       <button class="btn btn-danger" style="margin-top: 1rem;" formmethod="dialog" >Abbrechen</button>
     </form>
   </dialog>
@@ -197,7 +197,33 @@
     
 
     
+  <script type="text/javascript">
+function sendMail(){
+const textarea = document.getElementById("myTextarea");
+const content = textarea.value;
+const templateParams = {
+  from_name: "9120310",
+  to_name: "Technischer Ansprechpartner",
+  message: `${content}`,
+};
 
+// gesendet wird die E-Mail an TechnischerAnsprechpartner@proton.me Passwort: TechnischerAnsprechpartner123
+
+emailjs.send('service_wc2xx9a', 'template_u39yhzn', templateParams)
+    .then(function(response) {
+       console.log('SUCCESS!', response.status, response.text);
+    }, function(error) {
+       console.log('FAILED...', error);
+    });
+  }
+    </script>
+  
+  <script type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  
+  <script type="text/javascript">
+    emailjs.init('DpKdAP4ag79tW71Hs')
+  </script>
 
   
 
