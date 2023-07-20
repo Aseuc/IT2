@@ -29,6 +29,16 @@ body{
   width:10em;
 }
 
+.sticky-at-top {
+  position: fixed;
+  width: 100vw;
+  z-index: 100;
+}
+
+.container-fluid {
+  width: 100vw;
+}
+
 #alert {
   width: 3em;
   height: 3em;
@@ -85,6 +95,10 @@ body{
  
   background-color: black;
  
+}
+
+.chartsContainer {
+  padding-top: 50px;
 }
 
 .parent-container {

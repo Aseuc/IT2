@@ -1237,18 +1237,14 @@ function showWarnings() {
 }
 
 function onScroll() {
-  
+
   if (zoomStopped == true){
     zoomStopped = false;
     RenderChart(rd1, renderDataY1, renderDataX1)
     RenderChart(rd2, renderDataY2, renderDataX2)
     RenderChart(rd3, renderDataY3, renderDataX3)
   }
- 
-
-
 }
-
 
 window.addEventListener("scroll", onScroll);
 let eskaDia = document.getElementById("eskalation");
