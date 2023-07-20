@@ -53,7 +53,7 @@ async function getData(version) {
   let response = [];
 
   let randmonDataSet = Math.floor(Math.random() * 4);
-/*   let randmonDataSet = 0; */
+
 
 
 
