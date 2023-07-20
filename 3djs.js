@@ -810,7 +810,7 @@ async function visualizeData3() {
       let bd = document.getElementById("warningBadge");
 
 
-     /*  console.log(receiveData(YData2[i], Ydata[i])) */
+     receiveData(YData2[i], Ydata[i])
       if (lose == false){
    
        if(teil == true && lose == false){
